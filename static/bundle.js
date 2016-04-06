@@ -521,10 +521,14 @@
 	        for (var x = 0; x < this.player.hands.length; x++) {
 
 	            for (var y = 0; y < this.player.hands[x].cards.length; y++) {
-	                var newcard = ReactDOM.render(React.createElement(Card, { visible: 'hidden', cardNumber: '53', side: this.player.hands[x].hand_side, handPosition: y + 1 }), document.getElementById(this.player.hands[x].hand_side + "_card" + (y + 1)));
+
+	                var newcard = React.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side + "_card" + (y + 1)));
+	                //ReactDOM.render(React.createElement (Card,{visible:'hidden',cardNumber:'53',side:this.player.hands[x].hand_side,handPosition:y+1}),  document.getElementById(this.player.hands[x].hand_side+"_card"+(y+1)))
 	            }
 	            for (var z = 0; z < this.player.hands[x].chips.length; z++) {
-	                var newchip = ReactDOM.render(React.createElement(Chip_Hand, { visible: 'hidden', chipNumber: '5', side: this.player.hands[x].hand_side, position: z + 1 }), document.getElementById(this.player.hands[x].hand_side + '_chip' + (z + 1)));
+	                var newchip = React.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side + '_chip' + (z + 1)));
+
+	                //var newchip = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'5',side:this.player.hands[x].hand_side,position:z+1}),  document.getElementById(this.player.hands[x].hand_side+'_chip'+(z+1)))
 	            }
 	            this.player.hands[x].cards.length = 0;
 	            this.player.hands[x].held = false;
@@ -685,6 +689,7 @@
 	                game1.deck.dealCards(1, 0, 'dealer');
 	            } else {
 	                game1.deck.dealCards(1, this.hand_selected, 'player');
+
 	                this.hands[this.hand_selected].show_card();
 	                this.hands[this.hand_selected].update_score();
 	                var hand_count = 0;
