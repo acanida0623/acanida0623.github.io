@@ -471,11 +471,11 @@ function Game () {
 
           for(var y=0;y<this.player.hands[x].cards.length;y++){
 
-              var newcard = React.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+"_card"+(y+1)));
+              var newcard = ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+"_card"+(y+1)));
               //ReactDOM.render(React.createElement (Card,{visible:'hidden',cardNumber:'53',side:this.player.hands[x].hand_side,handPosition:y+1}),  document.getElementById(this.player.hands[x].hand_side+"_card"+(y+1)))
           }
           for(var z=0; z < this.player.hands[x].chips.length; z++) {
-              var newchip= React.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+'_chip'+(z+1)));
+              var newchip= ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+'_chip'+(z+1)));
 
             //var newchip = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'5',side:this.player.hands[x].hand_side,position:z+1}),  document.getElementById(this.player.hands[x].hand_side+'_chip'+(z+1)))
           }
@@ -489,7 +489,7 @@ function Game () {
           this.player.hands[x].chips.length = 0;
       }
       for(var a=0; a < this.dealer.hands[0].cards.length; a++) {
-        var newcard = React.unmountComponentAtNode(document.getElementById("dealer_card"+(a+1)));
+        var newcard = ReactDOM.unmountComponentAtNode(document.getElementById("dealer_card"+(a+1)));
 
         //var newcard = ReactDOM.render(React.createElement (Card,{visible:'hidden',cardNumber:'53',side:'dealer',handPosition:a+1}),  document.getElementById("dealer_card"+(a+1)))
 
@@ -498,21 +498,21 @@ function Game () {
       this.dealer.hands[0].hand_value = 0;
       this.dealer.hands[0].cards_shown = 1;
       this.player.ante_up(100);
-      var newcard = React.unmountComponentAtNode(document.getElementById("dealer_card"+(a+1)));
+      var newcard = ReactDOM.unmountComponentAtNode(document.getElementById("dealer_card"+(a+1)));
 
-      var left_bust = React.unmountComponentAtNode(document.getElementById('left_bust'))
-      var mid_bust = React.unmountComponentAtNode(document.getElementById('mid_bust'))
-      var right_bust = React.unmountComponentAtNode(document.getElementById('right_bust'))
+      var left_bust = ReactDOM.unmountComponentAtNode(document.getElementById('left_bust'))
+      var mid_bust = ReactDOM.unmountComponentAtNode(document.getElementById('mid_bust'))
+      var right_bust = ReactDOM.unmountComponentAtNode(document.getElementById('right_bust'))
 
-      var left_held = React.unmountComponentAtNode(document.getElementById('left_held'))
-      var mid_held = React.unmountComponentAtNode(document.getElementById('mid_held'))
-      var right_held = React.unmountComponentAtNode(document.getElementById('right_held'))
+      var left_held = ReactDOM.unmountComponentAtNode(document.getElementById('left_held'))
+      var mid_held = ReactDOM.unmountComponentAtNode(document.getElementById('mid_held'))
+      var right_held = ReactDOM.unmountComponentAtNode(document.getElementById('right_held'))
 
-      var dealer_score = React.unmountComponentAtNode(document.getElementById('dealer_score'))
+      var dealer_score = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'))
 
-      var left_score = React.unmountComponentAtNode(document.getElementById('left_score'))
-      var mid_score = React.unmountComponentAtNode(document.getElementById('mid_score'))
-      var right_score = React.unmountComponentAtNode(document.getElementById('right_score'))
+      var left_score = ReactDOM.unmountComponentAtNode(document.getElementById('left_score'))
+      var mid_score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
+      var right_score = ReactDOM.unmountComponentAtNode(document.getElementById('right_score'))
   };
 
 
