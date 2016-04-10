@@ -1,3 +1,85 @@
+.mc1animate-leave {
+	opacity:1;
+}
+
+.mc1animate-leave.mc1animate-leave-active {
+	opacity: 0.1;
+  transition: all 5000ms ease-in;
+}
+
+@-webkit-keyframes chip_in {
+    0%   {margin-left: -10%; margin-top:-6vh;}
+		5%   {margin-left: -9%; margin-top:-6vh;}
+		10%   {margin-left: -8%; margin-top:-6vh;}
+		15%   {margin-left: -7%; margin-top:-6vh;}
+		20%   {margin-left: -6%; margin-top:-6vh;}
+    25%  {margin-left: -5%; margin-top:-6vh;}
+		30%   {margin-left: -4%; margin-top:-6vh;}
+		35%   {margin-left: -3%; margin-top:-6vh;}
+		40%   {margin-left: -2%; margin-top:-6vh;}
+		45%   {margin-left: -1%; margin-top:-6vh;}
+    50%  {margin-left: 0%; margin-top:-6vh;}
+		55%   {margin-left: 1%; margin-top:-6vh;}
+		60%   {margin-left: 2%; margin-top:-6vh;}
+		65%   {margin-left: 3%; margin-top:-6vh;}
+		70%   {margin-left: 4%; margin-top:-6vh;}
+    75%  {margin-left: 5%; margin-top:-6vh;}
+		80%   {margin-left: 6%; margin-top:-6vh;}
+		85%   {margin-left: 7%; margin-top:-6vh;}
+		90%   {margin-left: 8%; margin-top:-6vh;}
+		95%   {margin-left: 9%; margin-top:-6vh;}
+    100% {margin-left: 11%; margin-top:-6vh;}
+}
+
+@-webkit-keyframes chip_win {
+    0%   {margin-left: 11%; margin-top:-6vh;}
+		5%   {margin-left: 11%; margin-top:-5vh;}
+		10%   {margin-left: 11%; margin-top:-4vh;}
+		15%   {margin-left: 11%; margin-top:-3vh;}
+		20%   {margin-left: 11%; margin-top:-2vh;}
+    25%  {margin-left: 11%; margin-top:-1vh;}
+		30%   {margin-left: 11%; margin-top:0vh;}
+		35%   {margin-left: 11%; margin-top:1vh;}
+		40%   {margin-left: 11%; margin-top:2vh;}
+		45%   {margin-left: 11%; margin-top:3vh;}
+    50%  {margin-left: 11%; margin-top:4vh;}
+		55%   {margin-left: 11%; margin-top:5vh;}
+		60%   {margin-left: 11%; margin-top:6vh;}
+		65%   {margin-left: 11%; margin-top:7vh;}
+		70%   {margin-left: 11%; margin-top:8vh;}
+    75%  {margin-left: 11%; margin-top:9vh;}
+		80%   {margin-left: 11%; margin-top:10vh;}
+		85%   {margin-left: 11%; margin-top:11vh;}
+		90%   {margin-left: 11%; margin-top:12vh;}
+		95%   {margin-left: 11%; margin-top:13vh;}
+    100% {margin-left: 11%; margin-top:14vh;}
+}
+
+@-webkit-keyframes chip_lose {
+    0%   {margin-left: 11%; margin-top:-6vh;}
+		5%   {margin-left: 11%; margin-top:-8vh;}
+		10%   {margin-left: 11%; margin-top:-10vh;}
+		15%   {margin-left: 11%; margin-top:-12vh;}
+		20%   {margin-left: 11%; margin-top:-14vh;}
+    25%  {margin-left: 11%; margin-top:-16vh;}
+		30%   {margin-left: 11%; margin-top:-18vh;}
+		35%   {margin-left: 11%; margin-top:-20vh;}
+		40%   {margin-left: 11%; margin-top:-22vh;}
+		45%   {margin-left: 11%; margin-top:-24vh;}
+    50%  {margin-left: 11%; margin-top:-26vh;}
+		55%   {margin-left: 11%; margin-top:-28vh;}
+		60%   {margin-left: 11%; margin-top:-30vh;}
+		65%   {margin-left: 11%; margin-top:-32vh;}
+		70%   {margin-left: 11%; margin-top:-34vh;}
+    75%  {margin-left: 11%; margin-top:-36vh;}
+		80%   {margin-left: 11%; margin-top:-38vh;}
+		85%   {margin-left: 11%; margin-top:-40vh;}
+		90%   {margin-left: 11%; margin-top:-44vh;}
+		95%   {margin-left: 11%; margin-top:-54vh;}
+    100% {margin-left: 11%; margin-top:-66vh;}
+}
+
+
 .hidden {
 	visibility:hidden;
 }
@@ -36,7 +118,7 @@ flex-direction: column;
 
 .main_container {
 
-	background-image: url("./images/blackjackbackground.png");
+	background-image: url("images/blackjackbackground.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
 	display: flex;
@@ -131,7 +213,7 @@ flex-direction: column;
 	margin-top: 10vh;
 }
 .left_score {
-	background-image: url("./images/score_container.png");
+	background-image: url("images/score_container.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
 	position: absolute;
@@ -371,7 +453,7 @@ flex-direction: column;
 }
 
 .dealer_score {
-	background-image: url("./images/score_container.png");
+	background-image: url("images/score_container.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
 	position: absolute;
@@ -452,21 +534,21 @@ flex-direction: column;
 .mid_held{
 
 	position: absolute;
-	margin-left:13%;
+	margin-left:10%;
 	margin-top: 5vh;
 	z-index: 100;
 }
 .left_held{
 
 	position: absolute;
-	margin-left:13%;
+	margin-left:10%;
 	margin-top: 5vh;
 	z-index: 100;
 }
 .right_held{
 
 	position: absolute;
-	margin-left:13%;
+	margin-left:10%;
 	margin-top: 5vh;
 	z-index: 100;
 }
@@ -481,7 +563,7 @@ flex-direction: column;
 	margin-left: 14%;
 }
 .mid_score {
-	background-image: url("./images/score_container.png");
+	background-image: url("images/score_container.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
 	position: absolute;
@@ -565,141 +647,252 @@ flex-direction: column;
 	width: 4%;
 }
 
-.mid_chip1 {
+.mid_chip_win {
+	margin-top: 22vh;
 	margin-left: 11%;
-	margin-top: -6vh;
+	-webkit-animation-name: chip_win;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
+}
+
+.mid_chip_lose {
+	margin-top: -86vh;
+	margin-left: 11%;
+	-webkit-animation-name: chip_lose;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
+}
+
+.mid_chip1 {
+	margin-left: 11%; margin-top:-6vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip2 {
 	margin-left: 11%;
 	margin-top: -6.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip3 {
 	margin-left: 11%;
 	margin-top: -7vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip4 {
 	margin-left: 11%;
 	margin-top: -7.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip5 {
 	margin-left: 11%;
 	margin-top: -8vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 
 .mid_chip6 {
 	margin-left: 11%;
 	margin-top: -8.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip7 {
 	margin-left: 11%;
 	margin-top: -9vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip8 {
 	margin-left: 11%;
 	margin-top: -9.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 
 .mid_chip9 {
 	margin-left: 7%;
 	margin-top: -6vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip10 {
 	margin-left: 7%;
 	margin-top: -6.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 
 .mid_chip11 {
 	margin-left: 7%;
 	margin-top: -7vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip12 {
 	margin-left: 7%;
 	margin-top: -7.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip13 {
 	margin-left: 7%;
 	margin-top: -8vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip14 {
 	margin-left: 7%;
 	margin-top: -8.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip15 {
 	margin-left: 7%;
 	margin-top: -9vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip16 {
 	margin-left: 7%;
 	margin-top: -9.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 
 
 .mid_chip17 {
 	margin-left: 11%;
 	margin-top: -1vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip18 {
 	margin-left: 11%;
 	margin-top: -1.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip19 {
 	margin-left: 11%;
 	margin-top: -2vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip20 {
 	margin-left: 11%;
 	margin-top: -2.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip21 {
 	margin-left: 11%;
 	margin-top: -3vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 
 .mid_chip22 {
 	margin-left: 11%;
 	margin-top: -3.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip23 {
 	margin-left: 11%;
 	margin-top: -4vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip24 {
 	margin-left: 11%;
 	margin-top: -4.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 
 .mid_chip25 {
 	margin-left: 7%;
 	margin-top: -1vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip26 {
 	margin-left: 7%;
 	margin-top: -1.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 
 .mid_chip27 {
 	margin-left: 7%;
 	margin-top: -2vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip28 {
 	margin-left: 7%;
 	margin-top: -2.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip29 {
 	margin-left: 7%;
 	margin-top: -3vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip30 {
 	margin-left: 7%;
 	margin-top: -3.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip31 {
 	margin-left: 7%;
 	margin-top: -4vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 .mid_chip32 {
 	margin-left: 7%;
 	margin-top: -4.5vh;
+	-webkit-animation-name: chip_in;
+	-webkit-animation-duration: .2s;
+	animation-timing-function: ease-in;
 }
 
 
@@ -731,7 +924,7 @@ flex-direction: column;
 	margin-top: 10vh;
 }
 .right_score {
-	background-image: url("./images/score_container.png");
+	background-image: url("images/score_container.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
 	position: absolute;
@@ -962,7 +1155,7 @@ flex-direction: column;
 	flex:2;
 
 
-	background-image: url("./images/bottom_bar.png");
+	background-image: url("images/bottom_bar.png");
 	background-repeat:no-repeat;
 	background-size:  100%;
 
@@ -1042,7 +1235,7 @@ overflow: visible;
 border: none;
 -webkit-border-radius: 0;
 border-radius: 0;
-font: normal 25pt/normal "Courier New", Courier, monospace;
+font: normal 2.3vw/normal "Courier New", Courier, monospace;
 color: rgba(255,255,255,1);
 text-decoration: normal;
 text-align: center;

@@ -49,13 +49,15 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 
+	var ReactCSSTransitionGroup = __webpack_require__(159);
+
 	var Arrow = React.createClass({
 	    displayName: 'Arrow',
 
 
 	    render: function render() {
 
-	        return React.createElement('img', { src: '../static/images/arrow.gif', className: this.props.side + "_pointer " + this.props.visible });
+	        return React.createElement('img', { src: 'static/images/arrow.gif', className: this.props.side + "_pointer " + this.props.visible });
 	    }
 	});
 
@@ -75,7 +77,7 @@
 	    },
 
 	    render: function render() {
-	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, src: "../static/images/cards/" + this.props.cardNumber + ".png", className: this.props.side + "_card" + this.props.handPosition + " " + this.props.visible });
+	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, src: "static/images/cards/" + this.props.cardNumber + ".png", className: this.props.side + "_card" + this.props.handPosition + " " + this.props.visible });
 	    }
 	});
 
@@ -121,7 +123,13 @@
 	        } else {
 	            hide = this.props.side + "_chip" + this.props.position;
 	        }
-	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, src: "../static/images/chips/chip" + this.props.chipNumber + ".png", className: hide });
+	        return React.createElement(
+	            ReactCSSTransitionGroup,
+	            { transitionName: 'mc1animate',
+	                transitionAppear: false,
+	                transitionEnter: false, transitionLeave: true, transitionLeaveTimeout: 5000 },
+	            React.createElement('img', { onMouseDown: this.onMouseDownHandler, src: "static/images/chips/chip" + this.props.chipNumber + ".png", className: hide })
+	        );
 	    }
 	});
 
@@ -151,14 +159,49 @@
 	        if (this.state.down) {
 	            downpic = "chip" + this.props.chipNumber + "down.png";
 	        }
+	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, onMouseUp: this.onMouseUpHandler, src: "static/images/chips/" + downpic, className: "chip" + this.props.chipNumber });
+	    }
+	});
 
-	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, onMouseUp: this.onMouseUpHandler, src: "../static/images/chips/" + downpic, className: "chip" + this.props.chipNumber });
+	var Winner = React.createClass({
+	    displayName: 'Winner',
+
+
+	    render: function render() {
+	        return React.createElement(
+	            'span',
+	            { className: "neongreen " + this.props.visible },
+	            'WIN'
+	        );
+	    }
+	});
+	var Lose = React.createClass({
+	    displayName: 'Lose',
+
+
+	    render: function render() {
+	        return React.createElement(
+	            'span',
+	            { className: "neonred " + this.props.visible },
+	            'LOSE'
+	        );
+	    }
+	});
+	var Draw = React.createClass({
+	    displayName: 'Draw',
+
+
+	    render: function render() {
+	        return React.createElement(
+	            'span',
+	            { className: "neongreen " + this.props.visible },
+	            'DRAW'
+	        );
 	    }
 	});
 
 	var Busted = React.createClass({
 	    displayName: 'Busted',
-
 
 	    render: function render() {
 	        return React.createElement(
@@ -210,7 +253,7 @@
 	        } else if (this.state.down) {
 	            hoverpic = "hitbuttondown.png";
 	        }
-	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, onMouseUp: this.onMouseUpHandler, className: "hit_button", src: "../static/images/buttons/" + hoverpic });
+	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, onMouseUp: this.onMouseUpHandler, className: "hit_button", src: "static/images/buttons/" + hoverpic });
 	    }
 	});
 
@@ -242,7 +285,44 @@
 	        } else if (this.state.down) {
 	            hoverpic = "standbuttondown.png";
 	        }
-	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, onMouseUp: this.onMouseUpHandler, className: 'stand_button', src: "../static/images/buttons/" + hoverpic });
+	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, onMouseUp: this.onMouseUpHandler, className: 'stand_button', src: "static/images/buttons/" + hoverpic });
+	    }
+	});
+
+	var Split_Button = React.createClass({
+	    displayName: 'Split_Button',
+
+	    getInitialState: function getInitialState() {
+	        return {
+
+	            down: false,
+	            inactive: this.props.inactive
+
+	        };
+	    },
+
+	    onMouseDownHandler: function onMouseDownHandler() {
+	        if (this.props.inactive == false) {
+	            this.setState({
+	                down: true
+	            });
+	            game1.player.split_hand(game1.player.hand_selected);
+	        }
+	    },
+	    onMouseUpHandler: function onMouseUpHandler() {
+	        this.setState({
+	            down: false
+	        });
+	    },
+	    render: function render() {
+	        var hoverpic = "split.png";
+	        if (this.state.down) {
+	            hoverpic = "splitdown.png";
+	        }
+	        if (this.state.inactive) {
+	            hoverpic = "splitdisabled.png";
+	        }
+	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, onMouseUp: this.onMouseUpHandler, className: 'split_button', src: "static/images/buttons/" + hoverpic });
 	    }
 	});
 
@@ -288,9 +368,15 @@
 	var Blank = React.createClass({
 	    displayName: 'Blank',
 
+	    onMouseDownHandler: function onMouseDownHandler() {
+	        this.setState({
+	            down: true
+	        });
+	        game1.reset_game();
+	    },
 
 	    render: function render() {
-	        return React.createElement('div', null);
+	        return React.createElement('img', { onMouseDown: this.onMouseDownHandler, className: "hit_button", src: "static/images/buttons/" + hoverpic });
 	    }
 	});
 
@@ -353,10 +439,11 @@
 	    var right_chip1 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'1'}),  document.getElementById('right_chip1'))
 	    var right_chip2 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'2'}),  document.getElementById('right_chip2'))
 	    var right_chip3 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'3'}),  document.getElementById('right_chip3'))
-	    var right_chip4 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'4'}),  document.getElementById('right_chip4'))
-	    var right_chip5 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'5'}),  document.getElementById('right_chip5'))
+	    var/ right_chip4 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'4'}),  document.getElementById('right_chip4'))
+	    va/r right_chip5 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'5'}),  document.getElementById('right_chip5'))
 	    var right_chip6 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'6'}),  document.getElementById('right_chip6'))
-	    var right_chip7 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'7'}),  document.getElementById('right_chip7'))
+	    var right_chip7 = ReactDOM.render(React.createElem Q
+	    "?"DSZent (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'7'}),  document.getElementById('right_chip7'))
 	    var right_chip8 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'100',side:'right',position:'8'}),  document.getElementById('right_chip8'))
 	    */
 	    var bet_chip1 = ReactDOM.render(React.createElement(Chip_Bet, { chipNumber: '1' }), document.getElementById('bet_chip1'));
@@ -372,15 +459,13 @@
 	    this.dealer = new Player("Dealer", 0);
 	    this.blackjack = false;
 	    this.deck = new Deck();
-
+	    this.game_over = false;
 	    this.first_turn = true;
 
-	    this.updateScoreBoards = function (score, hand) {};
 	    /*Called once at first draw and then when hold button is placed on all hands */
 	    this.check_winner = function () {
-	        console.log("first turn");
 	        if (this.first_turn == true) {
-
+	            console.log("first turn");
 	            if (this.player.hands[0].check_blackjack() == true) {
 	                this.player.hands[0].win = 'blackjack';
 	                this.blackjack = true;
@@ -397,7 +482,6 @@
 	        } else {
 	            for (var x = 0; x < this.player.hands.length; x++) {
 	                if (this.player.hands[x].hand_value > 21 && this.player.hands[x].cards.length > 1) {
-
 	                    for (var y = 0; y < this.player.hands[x].cards; y++) {
 	                        if (this.player.hands[x].cards[y].cardValue == 11) {
 
@@ -406,26 +490,36 @@
 	                            console.log("hand_score" + this.player.hands[x].hand_value);
 	                        }
 	                    }
-
-	                    var score = ReactDOM.render(React.createElement(Hand_Score, { score: this.player.hands[x].hand_value }), document.getElementById(this.player.hands[x].hand_side + '_score'));
-
+	                    var score = ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side + '_score'));
+	                    score = ReactDOM.render(React.createElement(Hand_Score, { score: this.player.hands[x].hand_value }), document.getElementById(this.player.hands[x].hand_side + '_score'));
 	                    if (this.player.hands[x].hand_value > 21 && this.player.hands[x].cards.length > 1) {
 	                        this.player.hands[x].win = 'bust';
+	                        var bust = ReactDOM.render(React.createElement(Busted, { visible: 'show' }), document.getElementById(this.player.hands[x].hand_side + "_bust"));
 	                    }
 	                } else if (this.player.hands[x].hand_value > this.dealer.hands[0].hand_value && this.player.hands[x].cards.length > 1) {
 	                    if (this.player.hands[x].hand_value > 21) {
 	                        this.player.hands[x].win = 'bust';
+	                        var bust = ReactDOM.render(React.createElement(Busted, { visible: 'show' }), document.getElementById(this.player.hands[x].hand_side + "_bust"));
 	                    } else {
 	                        this.player.hands[x].win = 'true';
+	                        var win = ReactDOM.render(React.createElement(Winner, { visible: 'show' }), document.getElementById(this.player.hands[x].hand_side + "_bust"));
 	                    }
 	                } else if (this.dealer.hands[0].hand_value > 21) {
 	                    if (this.player.hands[x].hand_value > 21) {
 	                        this.player.hands[x].win = 'bust';
+	                        var bust = ReactDOM.render(React.createElement(Busted, { visible: 'show' }), document.getElementById(this.player.hands[x].hand_side + "_bust"));
 	                    } else if (this.player.hands[x].cards.length > 1) {
+	                        var win = ReactDOM.render(React.createElement(Winner, { visible: 'show' }), document.getElementById(this.player.hands[x].hand_side + "_bust"));
 	                        this.player.hands[x].win = 'true';
 	                    }
-	                } else if (this.dealer.hands[0].hand_value == this.player.hands[x].hand_value) {
+	                } else if (this.dealer.hands[0].hand_value == this.player.hands[x].hand_value && this.player.hands[x].cards.length > 1) {
+	                    var draw = ReactDOM.render(React.createElement(Draw, { visible: 'show' }), document.getElementById(this.player.hands[x].hand_side + "_bust"));
+	                    console.log("Setting hand as draw");
 	                    this.player.hands[x].win = 'draw';
+	                    console.log("draw if statement");
+	                } else if (this.dealer.hands[0].hand_value > this.player.hands[x].hand_value && this.player.hands[x].cards.length > 1) {
+	                    this.player.hands[x].win = 'bust';
+	                    var lose = ReactDOM.render(React.createElement(Lose, { visible: 'show' }), document.getElementById(this.player.hands[x].hand_side + "_bust"));
 	                } else {
 	                    this.player.hands[x].win = 'bust';
 	                }
@@ -440,21 +534,23 @@
 	                case 'blackjack':
 	                    this.player.total_won += this.player.hands[0].bet * 1.5;
 	                    this.player.bank += this.player.hands[0].bet * 2;
-	                    var msg = "YOU AND GOT A BLACKJACK! YOU WON $" + this.player.total_won + "!";
+	                    var msg = "YOU AND THE DEALER EACH GOT A BLACKJACK! YOU WON $" + this.player.total_won + "!";
 	                    console.log(msg);
-	                    var total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
-	                    var bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.player.bank }), document.getElementById('total_bank'));
-	                    this.reset_game();
+	                    var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'));
+	                    var bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	                    total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
+	                    bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.player.bank }), document.getElementById('total_bank'));
+	                    this.reset_game(true);
 	                    break;
 
 	                case 'bust':
 	                    this.player.total_won = 0;
 	                    this.player.total_won -= this.player.hands[0].bet;
-
 	                    var msg = "DEALER GOT A BLACKJACK. YOU LOSE $" + this.player.total_won * -1 + "!";
 	                    console.log(msg);
-	                    var total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
-	                    this.reset_game();
+	                    var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'));
+	                    total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
+	                    this.reset_game(false);
 	                    break;
 
 	                case 'draw':
@@ -462,26 +558,27 @@
 	                    this.player.bank += this.player.hands[0].bet;
 	                    var msg = "YOU AND THE DEALER BOTH GOT A BLACKJACK. DRAW GAME!";
 	                    console.log(msg);
-	                    var total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
-	                    var bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.player.bank }), document.getElementById('total_bank'));
-	                    this.reset_game();
+	                    var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'));
+	                    var bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	                    total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
+	                    bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.player.bank }), document.getElementById('total_bank'));
+	                    this.reset_game(true);
 	                    break;
 
 	            }
 	        } else {
+	            game1.game_over = true;
 	            this.player.total_won = 0;
-	            console.log("else statement");
 	            for (var x = 0; x < this.player.hands.length; x++) {
-	                switch (this.player.hands[0].win) {
+	                switch (this.player.hands[x].win) {
 	                    case 'true':
-	                        console.log("win is true");
-
 	                        this.player.total_won += this.player.hands[x].bet;
 	                        this.player.bank += this.player.hands[x].bet * 2;
 	                        break;
 	                    case 'bust':
 	                        console.log("bust!!");
 	                        this.player.total_won -= this.player.hands[x].bet;
+	                        console.log(this.player.total_won);
 	                        break;
 	                    case 'draw':
 	                        this.player.total_won = 0;
@@ -495,21 +592,38 @@
 	            if (this.player.total_won > 0) {
 	                var msg = "YOU WON $" + this.player.total_won + "!";
 	                console.log(msg);
-	                var total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
-	                var bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.player.bank }), document.getElementById('total_bank'));
-	                this.reset_game();
-	            } else {
+	                var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'));
+	                var bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	                total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
+	                bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.player.bank }), document.getElementById('total_bank'));
 
+	                this.reset_game(true);
+	            } else {
 	                var msg = "YOU LOST $" + this.player.total_won * -1 + "!";
 	                console.log(msg);
-	                var total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
-	                var bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.player.bank }), document.getElementById('total_bank'));
-	                this.reset_game();
+	                var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'));
+	                var bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	                total_win = ReactDOM.render(React.createElement(Win, { win_amount: '$' + this.player.total_won }), document.getElementById('total_win'));
+	                bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.player.bank }), document.getElementById('total_bank'));
+	                this.reset_game(false);
 	            }
 	        }
 	    };
 
-	    this.reset_game = function () {
+	    this.unmount_chips = function () {
+	        for (var x = 0; x < game1.player.hands.length; x++) {
+	            for (var z = 0; z < game1.player.hands[x].chips.length; z++) {
+	                var newchip = ReactDOM.unmountComponentAtNode(document.getElementById(game1.player.hands[x].hand_side + '_chip' + (z + 1)));
+	            }
+	            game1.player.hands[x].bet = 0;
+	            game1.player.hands[x].chip_count = 1;
+	            game1.player.hands[x].chips.length = 0;
+	            game1.game_over = false;
+	        }
+	        game1.player.ante_up(1);
+	    };
+
+	    this.reset_game = function (win) {
 	        this.player.total_won = 0;
 	        this.player.playing = false;
 	        this.blackjack = false;
@@ -517,52 +631,17 @@
 	        this.player.split_count = 0;
 	        this.player.total_bet = 0;
 	        this.player.select_hand('mid');
-
 	        for (var x = 0; x < this.player.hands.length; x++) {
-
-	            for (var y = 0; y < this.player.hands[x].cards.length; y++) {
-
-	                var newcard = ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side + "_card" + (y + 1)));
-	                //ReactDOM.render(React.createElement (Card,{visible:'hidden',cardNumber:'53',side:this.player.hands[x].hand_side,handPosition:y+1}),  document.getElementById(this.player.hands[x].hand_side+"_card"+(y+1)))
-	            }
 	            for (var z = 0; z < this.player.hands[x].chips.length; z++) {
-	                var newchip = ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side + '_chip' + (z + 1)));
-
+	                if (win == true) {
+	                    document.querySelector("." + this.player.hands[x].hand_side + '_chip' + (z + 1)).className = 'mid_chip_win';
+	                } else {
+	                    document.querySelector("." + this.player.hands[x].hand_side + '_chip' + (z + 1)).className = 'mid_chip_lose';
+	                }
 	                //var newchip = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'5',side:this.player.hands[x].hand_side,position:z+1}),  document.getElementById(this.player.hands[x].hand_side+'_chip'+(z+1)))
 	            }
-	            this.player.hands[x].cards.length = 0;
-	            this.player.hands[x].held = false;
-	            this.player.hands[x].win = false;
-	            this.player.hands[x].hand_value = 0;
-	            this.player.hands[x].bet = 0;
-	            this.player.hands[x].chip_count = 1;
-	            this.player.hands[x].cards_shown = 1;
-	            this.player.hands[x].chips.length = 0;
 	        }
-	        for (var a = 0; a < this.dealer.hands[0].cards.length; a++) {
-	            var newcard = ReactDOM.unmountComponentAtNode(document.getElementById("dealer_card" + (a + 1)));
-
-	            //var newcard = ReactDOM.render(React.createElement (Card,{visible:'hidden',cardNumber:'53',side:'dealer',handPosition:a+1}),  document.getElementById("dealer_card"+(a+1)))
-	        }
-	        this.dealer.hands[0].cards.length = 0;
-	        this.dealer.hands[0].hand_value = 0;
-	        this.dealer.hands[0].cards_shown = 1;
-	        this.player.ante_up(100);
-	        var newcard = ReactDOM.unmountComponentAtNode(document.getElementById("dealer_card" + (a + 1)));
-
-	        var left_bust = ReactDOM.unmountComponentAtNode(document.getElementById('left_bust'));
-	        var mid_bust = ReactDOM.unmountComponentAtNode(document.getElementById('mid_bust'));
-	        var right_bust = ReactDOM.unmountComponentAtNode(document.getElementById('right_bust'));
-
-	        var left_held = ReactDOM.unmountComponentAtNode(document.getElementById('left_held'));
-	        var mid_held = ReactDOM.unmountComponentAtNode(document.getElementById('mid_held'));
-	        var right_held = ReactDOM.unmountComponentAtNode(document.getElementById('right_held'));
-
-	        var dealer_score = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'));
-
-	        var left_score = ReactDOM.unmountComponentAtNode(document.getElementById('left_score'));
-	        var mid_score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'));
-	        var right_score = ReactDOM.unmountComponentAtNode(document.getElementById('right_score'));
+	        setTimeout(game1.unmount_chips, 500);
 	    };
 	};
 
@@ -581,35 +660,36 @@
 	        this.hands[0].bet += bet;
 	        this.total_bet += bet;
 	        this.bank -= bet;
-	        var mid_chip1 = ReactDOM.render(React.createElement(Chip_Hand, { visible: 'show', chipNumber: bet, side: 'mid', position: '1' }), document.getElementById('mid_chip1'));
-	        var mid_bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + bet }), document.getElementById('mid_bet'));
-
-	        var total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
-	        var total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
+	        var mid_chip1 = ReactDOM.unmountComponentAtNode(document.getElementById('mid_chip1'));
+	        var mid_bet = ReactDOM.unmountComponentAtNode(document.getElementById('mid_bet'));
+	        var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'));
+	        var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	        mid_chip1 = ReactDOM.render(React.createElement(Chip_Hand, { visible: 'show', chipNumber: bet, side: 'mid', position: '1' }), document.getElementById('mid_chip1'));
+	        mid_bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + bet }), document.getElementById('mid_bet'));
+	        total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
+	        total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
 	    };
 
 	    this.bet_chip = function (chip_amount) {
 	        var bet = parseInt(chip_amount);
-
 	        if (this.playing == false) {
-	            console.log("check1");
 	            if (this.hands[this.hand_selected].bet + bet < 501 && bet < this.bank) {
-	                console.log("check2");
 	                this.hands[this.hand_selected].bet += bet;
 	                this.total_bet += bet;
 	                this.bank -= bet;
-	                var total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + this.total_bet }), document.getElementById('total_bet'));
-	                var total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.bank }), document.getElementById('total_bank'));
+	                var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'));
+	                var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	                total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + this.total_bet }), document.getElementById('total_bet'));
+	                total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + this.bank }), document.getElementById('total_bank'));
 	                this.hands[this.hand_selected].chips.push(new Chip(bet));
-
 	                var empty_chip_slot = this.hands[this.hand_selected].hand_side + "_chip" + (this.hands[this.hand_selected].chip_count + 1);
 	                var current_position = this.hands[this.hand_selected].chip_count + 1;
+	                var empty_chip_slots = ReactDOM.unmountComponentAtNode(document.getElementById(empty_chip_slot));
 	                empty_chip_slot = ReactDOM.render(React.createElement(Chip_Hand, { chipNumber: chip_amount, side: this.hands[this.hand_selected].hand_side, position: current_position }), document.getElementById(empty_chip_slot));
 	                this.hands[this.hand_selected].chip_count++;
-
-	                var mid_bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[this.hand_selected].bet }), document.getElementById(this.hands[this.hand_selected].hand_side + '_bet'));
+	                var mid_bet = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[this.hand_selected].hand_side + '_bet'));
+	                mid_bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[this.hand_selected].bet }), document.getElementById(this.hands[this.hand_selected].hand_side + '_bet'));
 	            } else if (bet > this.bank) {
-
 	                console.log("Hey! You Are Broke!");
 	            }
 	        }
@@ -618,25 +698,42 @@
 	    this.remove_chip = function () {
 	        if (this.playing == false) {
 	            var top_chip_slot = this.hands[this.hand_selected].hand_side + "_chip" + this.hands[this.hand_selected].chip_count;
-
 	            if (this.hands[this.hand_selected].chip_count > 1) {
-	                var mid_chip = ReactDOM.render(React.createElement(Chip_Hand, { visible: 'hidden', chipNumber: '5', side: this.hands[this.hand_selected].hand_side, position: this.hands[this.hand_selected].chip_count }), document.getElementById(top_chip_slot));
-	                this.hands[this.hand_selected].chip_count -= 1;
-	                this.bank += this.hands[this.hand_selected].chips[this.hands[this.hand_selected].chip_count].chip_value;
-	                this.total_bet -= this.hands[this.hand_selected].chips[this.hands[this.hand_selected].chip_count].chip_value;
-	                this.hands[this.hand_selected].bet -= this.hands[this.hand_selected].chips[this.hands[this.hand_selected].chip_count].chip_value;
-	                var mid_bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[this.hand_selected].bet }), document.getElementById(this.hands[this.hand_selected].hand_side + '_bet'));
+	                var mid_chip = ReactDOM.unmountComponentAtNode(document.getElementById(top_chip_slot));
 
-	                var total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + this.total_bet }), document.getElementById('total_bet'));
+	                mid_chip = ReactDOM.render(React.createElement(Chip_Hand, { visible: 'hidden', chipNumber: '5', side: this.hands[this.hand_selected].hand_side, position: this.hands[this.hand_selected].chip_count }), document.getElementById(top_chip_slot));
+
+	                this.hands[this.hand_selected].chip_count -= 1;
+
+	                this.bank += this.hands[this.hand_selected].chips[this.hands[this.hand_selected].chip_count].chip_value;
+
+	                this.total_bet -= this.hands[this.hand_selected].chips[this.hands[this.hand_selected].chip_count].chip_value;
+
+	                this.hands[this.hand_selected].bet -= this.hands[this.hand_selected].chips[this.hands[this.hand_selected].chip_count].chip_value;
+
+	                var mid_bet = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[this.hand_selected].hand_side + '_bet'));
+
+	                mid_bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[this.hand_selected].bet }), document.getElementById(this.hands[this.hand_selected].hand_side + '_bet'));
+
+	                var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'));
+
+	                total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + this.total_bet }), document.getElementById('total_bet'));
+
 	                var r = this.hands[this.hand_selected].chips.pop();
-	                var total_bank = ReactDOM.render(React.createElement(Bank, { bank: '$' + this.bank }), document.getElementById('total_bank'));
+
+	                var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+
+	                total_bank = ReactDOM.render(React.createElement(Bank, { bank: '$' + this.bank }), document.getElementById('total_bank'));
 	            }
 	        }
 	    };
 
 	    this.hold_hand = function () {
+
 	        if (this.playing == true) {
 	            this.hands[this.hand_selected].held = true;
+	            var held = ReactDOM.render(React.createElement(Held, { visible: 'show' }), document.getElementById(game1.player.hands[game1.player.hand_selected].hand_side + "_bust"));
+
 	            var hand_count = 0;
 	            var held_count = 0;
 	            for (var x = 0; x < this.hands.length; x++) {
@@ -656,30 +753,35 @@
 	                    game1.dealer.hands[0].cards[0].cardValue = 1;
 	                    game1.dealer.hands[0].hand_value -= 10;
 	                    console.log("hand_score" + game1.dealer.hands[0].hand_value);
-	                    var score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.dealer.hands[0].hand_value }), document.getElementById('dealer_score'));
+	                    var score = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'));
+
+	                    score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.dealer.hands[0].hand_value }), document.getElementById('dealer_score'));
 	                }
-	                var z = 1;
-	                while (z == 1) {
-	                    if (game1.dealer.hands[0].hand_value < 16) {
+
+	                loop1: while (true) {
+	                    console.log("loop+");
+	                    if (game1.dealer.hands[0].hand_value <= 16) {
 	                        console.log("dealer under 16, hitting card");
 	                        game1.deck.dealCards(1, 0, 'dealer');
 	                        game1.dealer.hands[0].show_card();
 	                        game1.dealer.hands[0].update_score();
-	                        if (game1.dealer.hands[0].check_bust()) {
+	                        if (game1.dealer.hands[0].check_bust() == true) {
 	                            game1.dealer.hands[0].win = 'bust';
 	                        }
+	                        continue loop1;
 	                    } else if (game1.dealer.hands[0].hand_value <= 21 && game1.dealer.hands[0].hand_value >= 17) {
 	                        console.log(game1.dealer.hands[0].hand_value);
 	                        game1.check_winner();
-	                        z = 2;
+	                        break loop1;
 	                    } else if (game1.dealer.hands[0].hand_value > 21) {
 	                        console.log(game1.dealer.hands[0].hand_value + "bustdealer");
-	                        if (game1.dealer.hands[0].check_bust()) {
-
+	                        if (game1.dealer.hands[0].check_bust() == true) {
 	                            game1.dealer.hands[0].win = 'bust';
+	                        } else {
+	                            continue loop1;
 	                        }
 	                        game1.check_winner();
-	                        z = 2;
+	                        break loop1;
 	                    }
 	                }
 	            }
@@ -687,60 +789,80 @@
 	    };
 
 	    this.hit_card = function () {
-	        if (this.playing) {
-	            console.log('playing');
-	            if (this.name == 'dealer') {
-	                game1.deck.dealCards(1, 0, 'dealer');
-	            } else {
-	                game1.deck.dealCards(1, this.hand_selected, 'player');
+	        if (game1.game_over == false) {
+	            if (this.playing) {
+	                console.log('playing');
+	                if (this.name == 'dealer') {
+	                    game1.deck.dealCards(1, 0, 'dealer');
+	                } else {
+	                    game1.deck.dealCards(1, this.hand_selected, 'player');
 
-	                this.hands[this.hand_selected].show_card();
-	                this.hands[this.hand_selected].update_score();
-	                var hand_count = 0;
-	                var bust_count = 0;
-	                //check if the new card busted the hand
-	                if (this.hands[this.hand_selected].check_bust()) {
-	                    this.hands[this.hand_selected].win = 'bust';
-
-	                    var bust = ReactDOM.render(React.createElement(Busted, { visible: 'show' }), document.getElementById(this.hands[this.hand_selected].hand_side + '_bust'));
-	                    //check if all of the player's hands are busted including possible split hands
-	                    for (var x = 0; x < this.hands.length; x++) {
-	                        if (this.hands[x].cards.length > 1) {
-	                            hand_count++;
+	                    this.hands[this.hand_selected].show_card();
+	                    this.hands[this.hand_selected].update_score();
+	                    var hand_count = 0;
+	                    var bust_count = 0;
+	                    //check if the new card busted the hand
+	                    if (this.hands[this.hand_selected].check_bust()) {
+	                        this.hands[this.hand_selected].win = 'bust';
+	                        //check if all of the player's hands are busted including possible split hands
+	                        for (var x = 0; x < this.hands.length; x++) {
+	                            if (this.hands[x].cards.length > 1) {
+	                                hand_count++;
+	                            }
+	                            if (this.hands[x].win == 'bust') {
+	                                bust_count++;
+	                                console.log("bust" + bust_count);
+	                            }
 	                        }
-	                        if (this.hands[x].win == 'bust') {
-	                            bust_count++;
-	                            console.log("bust" + bust_count);
+	                        //if all hands are busted, end the round by checking winner and calculating scores
+	                        if (hand_count == bust_count) {
+	                            game1.check_winner();
 	                        }
-	                    }
-	                    //if all hands are busted, end the round by checking winner and calculating scores
-	                    if (hand_count == bust_count) {
-
-	                        game1.check_winner();
 	                    }
 	                }
+	            } else {
+	                for (var x = 0; x < this.hands.length; x++) {
+	                    for (var y = 0; y < this.hands[x].cards.length; y++) {
+	                        var newcard = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[x].hand_side + "_card" + (y + 1)));
+	                    }
+	                    this.hands[x].cards.length = 0;
+	                    this.hands[x].held = false;
+	                    this.hands[x].win = false;
+	                    this.hands[x].hand_value = 0;
+	                    this.hands[x].cards_shown = 1;
+	                    var held = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[x].hand_side + "_held"));
+	                    var bust = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[x].hand_side + "_bust"));
+	                }
+	                for (var a = 0; a < game1.dealer.hands[0].cards.length; a++) {
+	                    var newcard = ReactDOM.unmountComponentAtNode(document.getElementById("dealer_card" + (a + 1)));
+	                }
+	                game1.dealer.hands[0].cards.length = 0;
+	                game1.dealer.hands[0].hand_value = 0;
+	                game1.dealer.hands[0].cards_shown = 1;
+	                var dealer_score = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'));
+	                var left_score = ReactDOM.unmountComponentAtNode(document.getElementById('left_score'));
+	                var mid_score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'));
+	                var right_score = ReactDOM.unmountComponentAtNode(document.getElementById('right_score'));
+	                game1.deck.dealCards(2, 0, 'dealer'); //(numberofCards,hand,dealer/player) hand 0=mid 1=left 2=right
+	                game1.deck.dealCards(2, 0, 'player');
+	                game1.dealer.hands[0].show_card(true); //true = dealers first cards, hide first card and show second only need to call once
+	                game1.player.hands[0].show_card(); //call to show the next card that has not been shown
+	                game1.player.hands[0].show_card();
+	                game1.player.hands[0].update_score();
+	                if (this.hands[0].hand_value == 22) {
+	                    this.hands[0].cards[0].cardValue = 1;
+	                    this.hands[0].hand_value -= 10;
+	                    var score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'));
+	                    score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hands[0].hand_value }), document.getElementById('mid_score'));
+	                }
+	                game1.player.playing = true;
+	                if (game1.dealer.hands[0].check_blackjack() == true) {
+	                    game1.check_winner();
+	                } else if (game1.player.hands[0].check_blackjack() == true) {
+	                    game1.check_winner();
+	                }
+	                game1.first_turn = false;
 	            }
-	        } else {
-
-	            game1.deck.dealCards(2, 0, 'dealer'); //(numberofCards,hand,dealer/player) hand 0=mid 1=left 2=right
-	            game1.deck.dealCards(2, 0, 'player');
-	            game1.dealer.hands[0].show_card(true); //true = dealers first cards, hide first card and show second only need to call once
-	            game1.player.hands[0].show_card(); //call to show the next card that has not been shown
-	            game1.player.hands[0].show_card();
-	            game1.player.hands[0].update_score();
-	            if (this.hands[0].hand_value == 22) {
-	                this.hands[0].cards[0].cardValue = 1;
-	                this.hands[0].hand_value -= 10;
-
-	                var score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hands[0].hand_value }), document.getElementById('mid_score'));
-	            }
-	            game1.player.playing = true;
-	            if (game1.dealer.hands[0].check_blackjack() == true) {
-	                game1.check_winner();
-	            } else if (game1.player.hands[0].check_blackjack() == true) {
-	                game1.check_winner();
-	            }
-	            game1.first_turn = false;
 	        }
 	    };
 
@@ -749,21 +871,24 @@
 	        switch (side) {
 	            case 'left':
 	                this.hand_selected = 1;
-	                var mid_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'hidden', side: 'mid' }), document.getElementById('mid_top'));
-	                var right_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'hidden', side: 'right' }), document.getElementById('right_top'));
-	                var left_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'visible', side: 'left' }), document.getElementById('left_top'));
+	                var mid_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('mid_top'));
+	                var right_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('right_top'));
+	                var left_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('left_top'));
+	                left_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'visible', side: 'left' }), document.getElementById('left_top'));
 	                break;
 	            case 'mid':
 	                this.hand_selected = 0;
-	                var mid_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'visible', side: 'mid' }), document.getElementById('mid_top'));
-	                var right_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'hidden', side: 'right' }), document.getElementById('right_top'));
-	                var left_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'hidden', side: 'left' }), document.getElementById('left_top'));
+	                var mid_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('mid_top'));
+	                var right_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('right_top'));
+	                var left_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('left_top'));
+	                mid_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'visible', side: 'mid' }), document.getElementById('mid_top'));
 	                break;
 	            case 'right':
 	                this.hand_selected = 2;
-	                var mid_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'hidden', side: 'mid' }), document.getElementById('mid_top'));
-	                var right_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'visible', side: 'right' }), document.getElementById('right_top'));
-	                var left_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'hidden', side: 'left' }), document.getElementById('left_top'));
+	                var mid_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('mid_top'));
+	                var right_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('right_top'));
+	                var left_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('left_top'));
+	                right_arrow = ReactDOM.render(React.createElement(Arrow, { visible: 'visible', side: 'right' }), document.getElementById('right_top'));
 	                break;
 	        }
 	    };
@@ -783,32 +908,37 @@
 	                if (this.hands[0].hand_value == 22) {
 	                    this.hands[0].cards[0].cardValue = 1;
 	                    this.hands[0].hand_value -= 10;
-
-	                    var score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hands[0].hand_value }), document.getElementById('mid_score'));
+	                    var score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'));
+	                    score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hands[0].hand_value }), document.getElementById('mid_score'));
 	                }
 	                if (this.hands[1].hand_value == 22) {
 	                    this.hands[1].cards[0].cardValue = 1;
 	                    this.hands[1].hand_value -= 10;
-
-	                    var score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hands[1].hand_value }), document.getElementById('left_score'));
+	                    var score = ReactDOM.unmountComponentAtNode(document.getElementById('left_score'));
+	                    score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hands[1].hand_value }), document.getElementById('left_score'));
 	                }
 	                this.hands[1].bet = this.hands[0].bet;
 	                game1.player.total_bet += this.hands[1].bet;
 	                game1.player.bank -= this.hands[1].bet;
+	                var bet = ReactDOM.unmountComponentAtNode(document.getElementById('left_bet'));
+
 	                var bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[1].bet }), document.getElementById('left_bet'));
 
 	                this.hands[1].chip_count = 0;
 	                for (var z = 0; z < this.hands[0].chips.length; z++) {
 	                    var empty_chip_slot = ReactDOM.render(React.createElement(Chip_Hand, { chipNumber: this.hands[0].chips[z].chip_value, side: 'left', position: z + 1 }), document.getElementById("left_chip" + (z + 1)));
+
+	                    var empty_chip_slot = ReactDOM.render(React.createElement(Chip_Hand, { chipNumber: this.hands[0].chips[z].chip_value, side: 'left', position: z + 1 }), document.getElementById("left_chip" + (z + 1)));
 	                    this.hands[1].chips.push(this.hands[0].chips[z]);
 	                    this.hands[1].chip_count++;
 	                };
-	                var total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
-	                var total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
-	                var left_score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.player.hands[1].hand_value }), document.getElementById('left_score'));
-
+	                var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'));
+	                var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	                var left_score = ReactDOM.unmountComponentAtNode(document.getElementById('left_score'));
+	                total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
+	                total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
+	                left_score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.player.hands[1].hand_value }), document.getElementById('left_score'));
 	                this.split_count++;
-
 	                break;
 	            case 1:
 	                this.hands[2].cards[0] = this.hands[side].cards.pop();
@@ -822,13 +952,16 @@
 	                if (this.hands[2].hand_value == 22) {
 	                    this.hands[2].cards[0].cardValue = 1;
 	                    this.hands[2].hand_value -= 10;
+	                    var score = ReactDOM.unmountComponentAtNode(document.getElementById('right_score'));
 
-	                    var score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.player.hands[2].hand_value }), document.getElementById('right_score'));
+	                    score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.player.hands[2].hand_value }), document.getElementById('right_score'));
 	                }
 	                this.hands[2].bet = this.hands[side].bet;
 	                game1.player.total_bet += this.hands[2].bet;
 	                game1.player.bank -= this.hands[2].bet;
-	                var bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[2].bet }), document.getElementById('right_bet'));
+	                var bet = ReactDOM.unmountComponentAtNode(document.getElementById('right_bet'));
+
+	                bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[2].bet }), document.getElementById('right_bet'));
 
 	                this.hands[2].chip_count = 0;
 	                for (var z = 0; z < this.hands[side].chips.length; z++) {
@@ -836,11 +969,14 @@
 	                    this.hands[2].chips.push(this.hands[side].chips[z]);
 	                    this.hands[2].chip_count++;
 	                };
-	                var total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
-	                var total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
+	                var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'));
+	                var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	                total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
+	                total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
+	                var split_button = ReactDOM.unmountComponentAtNode(document.getElementById('split_button'));
+	                split_button = ReactDOM.render(React.createElement(Split_Button, { bank: "$" + game1.player.bank }), document.getElementById('split_button'));
 
 	                break;
-
 	        }
 	    };
 	};
@@ -864,10 +1000,16 @@
 
 	        if (first_turn) {
 
-	            var mid_card = ReactDOM.render(React.createElement(Card, { visible: 'show', cardNumber: '53', side: 'dealer', handPosition: 1 }), document.getElementById('dealer_card1'));
+	            var mid_card = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_card1'));
+
+	            var mid_card = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_card2'));
+
+	            var mid_card = ReactDOM.render(React.createElement(Card, { visible: 'show', cardNumber: this.cards[0].cardNumber, side: 'dealer', handPosition: 1 }), document.getElementById('dealer_card1'));
 
 	            var mid_card = ReactDOM.render(React.createElement(Card, { visible: 'show', cardNumber: this.cards[1].cardNumber, side: 'dealer', handPosition: 2 }), document.getElementById('dealer_card2'));
 	        } else {
+	            var card = ReactDOM.unmountComponentAtNode(document.getElementById(this.hand_side + "_card" + this.cards_shown));
+
 	            var card = ReactDOM.render(React.createElement(Card, { visible: 'show', cardNumber: this.cards[this.cards_shown - 1].cardNumber, side: this.hand_side, handPosition: this.cards_shown }), document.getElementById(this.hand_side + "_card" + this.cards_shown));
 
 	            this.cards_shown++;
@@ -890,11 +1032,12 @@
 	        for (var x = 0; x < this.cards.length; x++) {
 	            this.hand_value += this.cards[x].cardValue;
 	        }
+	        var score = ReactDOM.unmountComponentAtNode(document.getElementById(this.hand_side + '_score'));
+
 	        var score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hand_value }), document.getElementById(this.hand_side + '_score'));
 	    };
 	    this.check_bust = function () {
 	        if (this.hand_value > 21) {
-
 	            for (var x = 0; x < this.cards.length; x++) {
 	                if (this.cards[x].cardValue == 11) {
 	                    this.cards[x].cardValue == 1;
@@ -904,9 +1047,9 @@
 	                    }
 	                }
 	            }
-	            var score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hand_value }), document.getElementById(this.hand_side + '_score'));
+	            var score = ReactDOM.unmountComponentAtNode(document.getElementById(this.hand_side + '_score'));
+	            score = ReactDOM.render(React.createElement(Hand_Score, { score: this.hand_value }), document.getElementById(this.hand_side + '_score'));
 	        }
-
 	        if (this.hand_value > 21) {
 	            return true;
 	        } else {
@@ -20638,6 +20781,802 @@
 	'use strict';
 
 	module.exports = __webpack_require__(3);
+
+/***/ },
+/* 159 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(160);
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @typechecks
+	 * @providesModule ReactCSSTransitionGroup
+	 */
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+
+	var assign = __webpack_require__(39);
+
+	var ReactTransitionGroup = __webpack_require__(161);
+	var ReactCSSTransitionGroupChild = __webpack_require__(163);
+
+	function createTransitionTimeoutPropValidator(transitionType) {
+	  var timeoutPropName = 'transition' + transitionType + 'Timeout';
+	  var enabledPropName = 'transition' + transitionType;
+
+	  return function (props) {
+	    // If the transition is enabled
+	    if (props[enabledPropName]) {
+	      // If no timeout duration is provided
+	      if (props[timeoutPropName] == null) {
+	        return new Error(timeoutPropName + ' wasn\'t supplied to ReactCSSTransitionGroup: ' + 'this can cause unreliable animations and won\'t be supported in ' + 'a future version of React. See ' + 'https://fb.me/react-animation-transition-group-timeout for more ' + 'information.');
+
+	        // If the duration isn't a number
+	      } else if (typeof props[timeoutPropName] !== 'number') {
+	          return new Error(timeoutPropName + ' must be a number (in milliseconds)');
+	        }
+	    }
+	  };
+	}
+
+	var ReactCSSTransitionGroup = React.createClass({
+	  displayName: 'ReactCSSTransitionGroup',
+
+	  propTypes: {
+	    transitionName: ReactCSSTransitionGroupChild.propTypes.name,
+
+	    transitionAppear: React.PropTypes.bool,
+	    transitionEnter: React.PropTypes.bool,
+	    transitionLeave: React.PropTypes.bool,
+	    transitionAppearTimeout: createTransitionTimeoutPropValidator('Appear'),
+	    transitionEnterTimeout: createTransitionTimeoutPropValidator('Enter'),
+	    transitionLeaveTimeout: createTransitionTimeoutPropValidator('Leave')
+	  },
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      transitionAppear: false,
+	      transitionEnter: true,
+	      transitionLeave: true
+	    };
+	  },
+
+	  _wrapChild: function _wrapChild(child) {
+	    // We need to provide this childFactory so that
+	    // ReactCSSTransitionGroupChild can receive updates to name, enter, and
+	    // leave while it is leaving.
+	    return React.createElement(ReactCSSTransitionGroupChild, {
+	      name: this.props.transitionName,
+	      appear: this.props.transitionAppear,
+	      enter: this.props.transitionEnter,
+	      leave: this.props.transitionLeave,
+	      appearTimeout: this.props.transitionAppearTimeout,
+	      enterTimeout: this.props.transitionEnterTimeout,
+	      leaveTimeout: this.props.transitionLeaveTimeout
+	    }, child);
+	  },
+
+	  render: function render() {
+	    return React.createElement(ReactTransitionGroup, assign({}, this.props, { childFactory: this._wrapChild }));
+	  }
+	});
+
+	module.exports = ReactCSSTransitionGroup;
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactTransitionGroup
+	 */
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var ReactTransitionChildMapping = __webpack_require__(162);
+
+	var assign = __webpack_require__(39);
+	var emptyFunction = __webpack_require__(15);
+
+	var ReactTransitionGroup = React.createClass({
+	  displayName: 'ReactTransitionGroup',
+
+	  propTypes: {
+	    component: React.PropTypes.any,
+	    childFactory: React.PropTypes.func
+	  },
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      component: 'span',
+	      childFactory: emptyFunction.thatReturnsArgument
+	    };
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      children: ReactTransitionChildMapping.getChildMapping(this.props.children)
+	    };
+	  },
+
+	  componentWillMount: function componentWillMount() {
+	    this.currentlyTransitioningKeys = {};
+	    this.keysToEnter = [];
+	    this.keysToLeave = [];
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    var initialChildMapping = this.state.children;
+	    for (var key in initialChildMapping) {
+	      if (initialChildMapping[key]) {
+	        this.performAppear(key);
+	      }
+	    }
+	  },
+
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var nextChildMapping = ReactTransitionChildMapping.getChildMapping(nextProps.children);
+	    var prevChildMapping = this.state.children;
+
+	    this.setState({
+	      children: ReactTransitionChildMapping.mergeChildMappings(prevChildMapping, nextChildMapping)
+	    });
+
+	    var key;
+
+	    for (key in nextChildMapping) {
+	      var hasPrev = prevChildMapping && prevChildMapping.hasOwnProperty(key);
+	      if (nextChildMapping[key] && !hasPrev && !this.currentlyTransitioningKeys[key]) {
+	        this.keysToEnter.push(key);
+	      }
+	    }
+
+	    for (key in prevChildMapping) {
+	      var hasNext = nextChildMapping && nextChildMapping.hasOwnProperty(key);
+	      if (prevChildMapping[key] && !hasNext && !this.currentlyTransitioningKeys[key]) {
+	        this.keysToLeave.push(key);
+	      }
+	    }
+
+	    // If we want to someday check for reordering, we could do it here.
+	  },
+
+	  componentDidUpdate: function componentDidUpdate() {
+	    var keysToEnter = this.keysToEnter;
+	    this.keysToEnter = [];
+	    keysToEnter.forEach(this.performEnter);
+
+	    var keysToLeave = this.keysToLeave;
+	    this.keysToLeave = [];
+	    keysToLeave.forEach(this.performLeave);
+	  },
+
+	  performAppear: function performAppear(key) {
+	    this.currentlyTransitioningKeys[key] = true;
+
+	    var component = this.refs[key];
+
+	    if (component.componentWillAppear) {
+	      component.componentWillAppear(this._handleDoneAppearing.bind(this, key));
+	    } else {
+	      this._handleDoneAppearing(key);
+	    }
+	  },
+
+	  _handleDoneAppearing: function _handleDoneAppearing(key) {
+	    var component = this.refs[key];
+	    if (component.componentDidAppear) {
+	      component.componentDidAppear();
+	    }
+
+	    delete this.currentlyTransitioningKeys[key];
+
+	    var currentChildMapping = ReactTransitionChildMapping.getChildMapping(this.props.children);
+
+	    if (!currentChildMapping || !currentChildMapping.hasOwnProperty(key)) {
+	      // This was removed before it had fully appeared. Remove it.
+	      this.performLeave(key);
+	    }
+	  },
+
+	  performEnter: function performEnter(key) {
+	    this.currentlyTransitioningKeys[key] = true;
+
+	    var component = this.refs[key];
+
+	    if (component.componentWillEnter) {
+	      component.componentWillEnter(this._handleDoneEntering.bind(this, key));
+	    } else {
+	      this._handleDoneEntering(key);
+	    }
+	  },
+
+	  _handleDoneEntering: function _handleDoneEntering(key) {
+	    var component = this.refs[key];
+	    if (component.componentDidEnter) {
+	      component.componentDidEnter();
+	    }
+
+	    delete this.currentlyTransitioningKeys[key];
+
+	    var currentChildMapping = ReactTransitionChildMapping.getChildMapping(this.props.children);
+
+	    if (!currentChildMapping || !currentChildMapping.hasOwnProperty(key)) {
+	      // This was removed before it had fully entered. Remove it.
+	      this.performLeave(key);
+	    }
+	  },
+
+	  performLeave: function performLeave(key) {
+	    this.currentlyTransitioningKeys[key] = true;
+
+	    var component = this.refs[key];
+	    if (component.componentWillLeave) {
+	      component.componentWillLeave(this._handleDoneLeaving.bind(this, key));
+	    } else {
+	      // Note that this is somewhat dangerous b/c it calls setState()
+	      // again, effectively mutating the component before all the work
+	      // is done.
+	      this._handleDoneLeaving(key);
+	    }
+	  },
+
+	  _handleDoneLeaving: function _handleDoneLeaving(key) {
+	    var component = this.refs[key];
+
+	    if (component.componentDidLeave) {
+	      component.componentDidLeave();
+	    }
+
+	    delete this.currentlyTransitioningKeys[key];
+
+	    var currentChildMapping = ReactTransitionChildMapping.getChildMapping(this.props.children);
+
+	    if (currentChildMapping && currentChildMapping.hasOwnProperty(key)) {
+	      // This entered again before it fully left. Add it again.
+	      this.performEnter(key);
+	    } else {
+	      this.setState(function (state) {
+	        var newChildren = assign({}, state.children);
+	        delete newChildren[key];
+	        return { children: newChildren };
+	      });
+	    }
+	  },
+
+	  render: function render() {
+	    // TODO: we could get rid of the need for the wrapper node
+	    // by cloning a single child
+	    var childrenToRender = [];
+	    for (var key in this.state.children) {
+	      var child = this.state.children[key];
+	      if (child) {
+	        // You may need to apply reactive updates to a child as it is leaving.
+	        // The normal React way to do it won't work since the child will have
+	        // already been removed. In case you need this behavior you can provide
+	        // a childFactory function to wrap every child, even the ones that are
+	        // leaving.
+	        childrenToRender.push(React.cloneElement(this.props.childFactory(child), { ref: key, key: key }));
+	      }
+	    }
+	    return React.createElement(this.props.component, this.props, childrenToRender);
+	  }
+	});
+
+	module.exports = ReactTransitionGroup;
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @typechecks static-only
+	 * @providesModule ReactTransitionChildMapping
+	 */
+
+	'use strict';
+
+	var flattenChildren = __webpack_require__(116);
+
+	var ReactTransitionChildMapping = {
+	  /**
+	   * Given `this.props.children`, return an object mapping key to child. Just
+	   * simple syntactic sugar around flattenChildren().
+	   *
+	   * @param {*} children `this.props.children`
+	   * @return {object} Mapping of key to child
+	   */
+	  getChildMapping: function getChildMapping(children) {
+	    if (!children) {
+	      return children;
+	    }
+	    return flattenChildren(children);
+	  },
+
+	  /**
+	   * When you're adding or removing children some may be added or removed in the
+	   * same render pass. We want to show *both* since we want to simultaneously
+	   * animate elements in and out. This function takes a previous set of keys
+	   * and a new set of keys and merges them with its best guess of the correct
+	   * ordering. In the future we may expose some of the utilities in
+	   * ReactMultiChild to make this easy, but for now React itself does not
+	   * directly have this concept of the union of prevChildren and nextChildren
+	   * so we implement it here.
+	   *
+	   * @param {object} prev prev children as returned from
+	   * `ReactTransitionChildMapping.getChildMapping()`.
+	   * @param {object} next next children as returned from
+	   * `ReactTransitionChildMapping.getChildMapping()`.
+	   * @return {object} a key set that contains all keys in `prev` and all keys
+	   * in `next` in a reasonable order.
+	   */
+	  mergeChildMappings: function mergeChildMappings(prev, next) {
+	    prev = prev || {};
+	    next = next || {};
+
+	    function getValueForKey(key) {
+	      if (next.hasOwnProperty(key)) {
+	        return next[key];
+	      } else {
+	        return prev[key];
+	      }
+	    }
+
+	    // For each key of `next`, the list of keys to insert before that key in
+	    // the combined list
+	    var nextKeysPending = {};
+
+	    var pendingKeys = [];
+	    for (var prevKey in prev) {
+	      if (next.hasOwnProperty(prevKey)) {
+	        if (pendingKeys.length) {
+	          nextKeysPending[prevKey] = pendingKeys;
+	          pendingKeys = [];
+	        }
+	      } else {
+	        pendingKeys.push(prevKey);
+	      }
+	    }
+
+	    var i;
+	    var childMapping = {};
+	    for (var nextKey in next) {
+	      if (nextKeysPending.hasOwnProperty(nextKey)) {
+	        for (i = 0; i < nextKeysPending[nextKey].length; i++) {
+	          var pendingNextKey = nextKeysPending[nextKey][i];
+	          childMapping[nextKeysPending[nextKey][i]] = getValueForKey(pendingNextKey);
+	        }
+	      }
+	      childMapping[nextKey] = getValueForKey(nextKey);
+	    }
+
+	    // Finally, add the keys which didn't appear before any key in `next`
+	    for (i = 0; i < pendingKeys.length; i++) {
+	      childMapping[pendingKeys[i]] = getValueForKey(pendingKeys[i]);
+	    }
+
+	    return childMapping;
+	  }
+	};
+
+	module.exports = ReactTransitionChildMapping;
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @typechecks
+	 * @providesModule ReactCSSTransitionGroupChild
+	 */
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var ReactDOM = __webpack_require__(3);
+
+	var CSSCore = __webpack_require__(164);
+	var ReactTransitionEvents = __webpack_require__(165);
+
+	var onlyChild = __webpack_require__(156);
+
+	// We don't remove the element from the DOM until we receive an animationend or
+	// transitionend event. If the user screws up and forgets to add an animation
+	// their node will be stuck in the DOM forever, so we detect if an animation
+	// does not start and if it doesn't, we just call the end listener immediately.
+	var TICK = 17;
+
+	var ReactCSSTransitionGroupChild = React.createClass({
+	  displayName: 'ReactCSSTransitionGroupChild',
+
+	  propTypes: {
+	    name: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.shape({
+	      enter: React.PropTypes.string,
+	      leave: React.PropTypes.string,
+	      active: React.PropTypes.string
+	    }), React.PropTypes.shape({
+	      enter: React.PropTypes.string,
+	      enterActive: React.PropTypes.string,
+	      leave: React.PropTypes.string,
+	      leaveActive: React.PropTypes.string,
+	      appear: React.PropTypes.string,
+	      appearActive: React.PropTypes.string
+	    })]).isRequired,
+
+	    // Once we require timeouts to be specified, we can remove the
+	    // boolean flags (appear etc.) and just accept a number
+	    // or a bool for the timeout flags (appearTimeout etc.)
+	    appear: React.PropTypes.bool,
+	    enter: React.PropTypes.bool,
+	    leave: React.PropTypes.bool,
+	    appearTimeout: React.PropTypes.number,
+	    enterTimeout: React.PropTypes.number,
+	    leaveTimeout: React.PropTypes.number
+	  },
+
+	  transition: function transition(animationType, finishCallback, userSpecifiedDelay) {
+	    var node = ReactDOM.findDOMNode(this);
+
+	    if (!node) {
+	      if (finishCallback) {
+	        finishCallback();
+	      }
+	      return;
+	    }
+
+	    var className = this.props.name[animationType] || this.props.name + '-' + animationType;
+	    var activeClassName = this.props.name[animationType + 'Active'] || className + '-active';
+	    var timeout = null;
+
+	    var endListener = function endListener(e) {
+	      if (e && e.target !== node) {
+	        return;
+	      }
+
+	      clearTimeout(timeout);
+
+	      CSSCore.removeClass(node, className);
+	      CSSCore.removeClass(node, activeClassName);
+
+	      ReactTransitionEvents.removeEndEventListener(node, endListener);
+
+	      // Usually this optional callback is used for informing an owner of
+	      // a leave animation and telling it to remove the child.
+	      if (finishCallback) {
+	        finishCallback();
+	      }
+	    };
+
+	    CSSCore.addClass(node, className);
+
+	    // Need to do this to actually trigger a transition.
+	    this.queueClass(activeClassName);
+
+	    // If the user specified a timeout delay.
+	    if (userSpecifiedDelay) {
+	      // Clean-up the animation after the specified delay
+	      timeout = setTimeout(endListener, userSpecifiedDelay);
+	      this.transitionTimeouts.push(timeout);
+	    } else {
+	      // DEPRECATED: this listener will be removed in a future version of react
+	      ReactTransitionEvents.addEndEventListener(node, endListener);
+	    }
+	  },
+
+	  queueClass: function queueClass(className) {
+	    this.classNameQueue.push(className);
+
+	    if (!this.timeout) {
+	      this.timeout = setTimeout(this.flushClassNameQueue, TICK);
+	    }
+	  },
+
+	  flushClassNameQueue: function flushClassNameQueue() {
+	    if (this.isMounted()) {
+	      this.classNameQueue.forEach(CSSCore.addClass.bind(CSSCore, ReactDOM.findDOMNode(this)));
+	    }
+	    this.classNameQueue.length = 0;
+	    this.timeout = null;
+	  },
+
+	  componentWillMount: function componentWillMount() {
+	    this.classNameQueue = [];
+	    this.transitionTimeouts = [];
+	  },
+
+	  componentWillUnmount: function componentWillUnmount() {
+	    if (this.timeout) {
+	      clearTimeout(this.timeout);
+	    }
+	    this.transitionTimeouts.forEach(function (timeout) {
+	      clearTimeout(timeout);
+	    });
+	  },
+
+	  componentWillAppear: function componentWillAppear(done) {
+	    if (this.props.appear) {
+	      this.transition('appear', done, this.props.appearTimeout);
+	    } else {
+	      done();
+	    }
+	  },
+
+	  componentWillEnter: function componentWillEnter(done) {
+	    if (this.props.enter) {
+	      this.transition('enter', done, this.props.enterTimeout);
+	    } else {
+	      done();
+	    }
+	  },
+
+	  componentWillLeave: function componentWillLeave(done) {
+	    if (this.props.leave) {
+	      this.transition('leave', done, this.props.leaveTimeout);
+	    } else {
+	      done();
+	    }
+	  },
+
+	  render: function render() {
+	    return onlyChild(this.props.children);
+	  }
+	});
+
+	module.exports = ReactCSSTransitionGroupChild;
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule CSSCore
+	 * @typechecks
+	 */
+
+	'use strict';
+
+	var invariant = __webpack_require__(13);
+
+	/**
+	 * The CSSCore module specifies the API (and implements most of the methods)
+	 * that should be used when dealing with the display of elements (via their
+	 * CSS classes and visibility on screen. It is an API focused on mutating the
+	 * display and not reading it as no logical state should be encoded in the
+	 * display of elements.
+	 */
+
+	var CSSCore = {
+
+	  /**
+	   * Adds the class passed in to the element if it doesn't already have it.
+	   *
+	   * @param {DOMElement} element the element to set the class on
+	   * @param {string} className the CSS className
+	   * @return {DOMElement} the element passed in
+	   */
+	  addClass: function addClass(element, className) {
+	    !!/\s/.test(className) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'CSSCore.addClass takes only a single class name. "%s" contains ' + 'multiple classes.', className) : invariant(false) : undefined;
+
+	    if (className) {
+	      if (element.classList) {
+	        element.classList.add(className);
+	      } else if (!CSSCore.hasClass(element, className)) {
+	        element.className = element.className + ' ' + className;
+	      }
+	    }
+	    return element;
+	  },
+
+	  /**
+	   * Removes the class passed in from the element
+	   *
+	   * @param {DOMElement} element the element to set the class on
+	   * @param {string} className the CSS className
+	   * @return {DOMElement} the element passed in
+	   */
+	  removeClass: function removeClass(element, className) {
+	    !!/\s/.test(className) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'CSSCore.removeClass takes only a single class name. "%s" contains ' + 'multiple classes.', className) : invariant(false) : undefined;
+
+	    if (className) {
+	      if (element.classList) {
+	        element.classList.remove(className);
+	      } else if (CSSCore.hasClass(element, className)) {
+	        element.className = element.className.replace(new RegExp('(^|\\s)' + className + '(?:\\s|$)', 'g'), '$1').replace(/\s+/g, ' ') // multiple spaces to one
+	        .replace(/^\s*|\s*$/g, ''); // trim the ends
+	      }
+	    }
+	    return element;
+	  },
+
+	  /**
+	   * Helper to add or remove a class from an element based on a condition.
+	   *
+	   * @param {DOMElement} element the element to set the class on
+	   * @param {string} className the CSS className
+	   * @param {*} bool condition to whether to add or remove the class
+	   * @return {DOMElement} the element passed in
+	   */
+	  conditionClass: function conditionClass(element, className, bool) {
+	    return (bool ? CSSCore.addClass : CSSCore.removeClass)(element, className);
+	  },
+
+	  /**
+	   * Tests whether the element has the class specified.
+	   *
+	   * @param {DOMNode|DOMWindow} element the element to set the class on
+	   * @param {string} className the CSS className
+	   * @return {boolean} true if the element has the class, false if not
+	   */
+	  hasClass: function hasClass(element, className) {
+	    !!/\s/.test(className) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'CSS.hasClass takes only a single class name.') : invariant(false) : undefined;
+	    if (element.classList) {
+	      return !!className && element.classList.contains(className);
+	    }
+	    return (' ' + element.className + ' ').indexOf(' ' + className + ' ') > -1;
+	  }
+
+	};
+
+	module.exports = CSSCore;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactTransitionEvents
+	 */
+
+	'use strict';
+
+	var ExecutionEnvironment = __webpack_require__(9);
+
+	/**
+	 * EVENT_NAME_MAP is used to determine which event fired when a
+	 * transition/animation ends, based on the style property used to
+	 * define that event.
+	 */
+	var EVENT_NAME_MAP = {
+	  transitionend: {
+	    'transition': 'transitionend',
+	    'WebkitTransition': 'webkitTransitionEnd',
+	    'MozTransition': 'mozTransitionEnd',
+	    'OTransition': 'oTransitionEnd',
+	    'msTransition': 'MSTransitionEnd'
+	  },
+
+	  animationend: {
+	    'animation': 'animationend',
+	    'WebkitAnimation': 'webkitAnimationEnd',
+	    'MozAnimation': 'mozAnimationEnd',
+	    'OAnimation': 'oAnimationEnd',
+	    'msAnimation': 'MSAnimationEnd'
+	  }
+	};
+
+	var endEvents = [];
+
+	function detectEvents() {
+	  var testEl = document.createElement('div');
+	  var style = testEl.style;
+
+	  // On some platforms, in particular some releases of Android 4.x,
+	  // the un-prefixed "animation" and "transition" properties are defined on the
+	  // style object but the events that fire will still be prefixed, so we need
+	  // to check if the un-prefixed events are useable, and if not remove them
+	  // from the map
+	  if (!('AnimationEvent' in window)) {
+	    delete EVENT_NAME_MAP.animationend.animation;
+	  }
+
+	  if (!('TransitionEvent' in window)) {
+	    delete EVENT_NAME_MAP.transitionend.transition;
+	  }
+
+	  for (var baseEventName in EVENT_NAME_MAP) {
+	    var baseEvents = EVENT_NAME_MAP[baseEventName];
+	    for (var styleName in baseEvents) {
+	      if (styleName in style) {
+	        endEvents.push(baseEvents[styleName]);
+	        break;
+	      }
+	    }
+	  }
+	}
+
+	if (ExecutionEnvironment.canUseDOM) {
+	  detectEvents();
+	}
+
+	// We use the raw {add|remove}EventListener() call because EventListener
+	// does not know how to remove event listeners and we really should
+	// clean up. Also, these events are not triggered in older browsers
+	// so we should be A-OK here.
+
+	function addEventListener(node, eventName, eventListener) {
+	  node.addEventListener(eventName, eventListener, false);
+	}
+
+	function removeEventListener(node, eventName, eventListener) {
+	  node.removeEventListener(eventName, eventListener, false);
+	}
+
+	var ReactTransitionEvents = {
+	  addEndEventListener: function addEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      // If CSS transitions are not supported, trigger an "end animation"
+	      // event immediately.
+	      window.setTimeout(eventListener, 0);
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      addEventListener(node, endEvent, eventListener);
+	    });
+	  },
+
+	  removeEndEventListener: function removeEndEventListener(node, eventListener) {
+	    if (endEvents.length === 0) {
+	      return;
+	    }
+	    endEvents.forEach(function (endEvent) {
+	      removeEventListener(node, endEvent, eventListener);
+	    });
+	  }
+	};
+
+	module.exports = ReactTransitionEvents;
 
 /***/ }
 /******/ ]);
