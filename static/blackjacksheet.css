@@ -1118,6 +1118,16 @@ flex-direction: column;
 
 }
 
+.split_button {
+	position: absolute;
+	margin-left: 67%;
+	margin-top: 13.5vh;
+	
+
+	height: 8vh;
+	width: 7vw
+}
+
 
 .hit_button {
 	border: 0;
@@ -1129,6 +1139,7 @@ flex-direction: column;
 	width: 10vw;
 
 }
+
 
 .stand_button {
 	border: 0;
