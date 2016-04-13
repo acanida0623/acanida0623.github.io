@@ -116,7 +116,7 @@ var Chip_Bet = React.createClass ({
 var Winner = React.createClass ({
 
     render: function() {
-      return <span className={"neongreen "+this.props.visible}>WIN</span>
+      return <span className={"neongreen "+this.props.visible}>   WIN</span>
   }
 });
 var Lose = React.createClass ({
@@ -128,23 +128,25 @@ var Lose = React.createClass ({
 var Draw = React.createClass ({
 
     render: function() {
-      return <span className={"neongreen "+this.props.visible}>DRAW</span>
+      return <span className={"neongreen "+this.props.visible}>   DRAW</span>
   }
 });
 
 
 var Busted = React.createClass ({
     render: function() {
-      return <span className={"neonred "+this.props.visible}>BUSTED</span>
+      return <span className={"neonred "+this.props.visible}>  BUSTED</span>
   }
 });
 
 var Held = React.createClass ({
 
     render: function() {
-      return <span className={"neongreen "+this.props.visible}>HELD</span>
+      return <span className={"neongreen "+this.props.visible}>  HELD</span>
   }
 });
+
+
 
 var Hit_Button = React.createClass ({
   getInitialState: function() {
@@ -273,6 +275,13 @@ var Win = React.createClass ({
   }
 });
 
+var Blackjack = React.createClass ({
+
+    render: function() {
+      return <span className="neonred"> BLACKJACK</span>
+
+  }
+});
 
 var Blank = React.createClass ({
   onMouseDownHandler: function() {
@@ -293,8 +302,8 @@ var Blank = React.createClass ({
 
 
 function inject_objects() {
-var total_bank = ReactDOM.render(React.createElement (Bank,{bank:''}),  document.getElementById('total_bank'))
-var total_bet = ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$5'}),  document.getElementById('total_bet'))
+var total_bank = ReactDOM.render(React.createElement (Bank,{bank:'$2000'}),  document.getElementById('total_bank'))
+var total_bet = ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$0'}),  document.getElementById('total_bet'))
 var total_win = ReactDOM.render(React.createElement (Win,{win_amount:'$0'}),  document.getElementById('total_win'))
 var stand_button= ReactDOM.render(React.createElement (Stand_Button),  document.getElementById('stand_button'))
 var hit_button= ReactDOM.render(React.createElement (Hit_Button),  document.getElementById('hit_button'))
@@ -376,15 +385,21 @@ function Game () {
         if (this.player.hands[0].check_blackjack()==true) {
             this.player.hands[0].win = 'blackjack';
             this.blackjack = true;
+            var bj= ReactDOM.render(React.createElement (Blackjack),  document.getElementById("mid_bust"))
 
         } if(this.dealer.hands[0].check_blackjack()==true) {
           console.log("dealerbj");
+          var bj= ReactDOM.render(React.createElement (Blackjack),  document.getElementById("mid_held"))
+
             this.player.hands[0].win = 'bust';
             this.blackjack = true;
 
         }if(this.player.hands[0].check_blackjack()==true && this.dealer.hands[0].check_blackjack()==true) {
           console.log("tie");
             this.player.hands[0].win="draw";
+            var draws = ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById("mid_held"))
+            draws = ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById("mid_bust"))
+
             this.blackjack = true;
         }
         this.first_turn = false;
@@ -414,6 +429,7 @@ function Game () {
                         var win = ReactDOM.render(React.createElement (Winner,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
                     }
             }else if (this.dealer.hands[0].hand_value > 21) {
+                  var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById("mid_held"))
                   if (this.player.hands[x].hand_value > 21) {
                       this.player.hands[x].win='bust';
                       var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
@@ -423,14 +439,13 @@ function Game () {
                   }
               }else if (this.dealer.hands[0].hand_value == this.player.hands[x].hand_value && this.player.hands[x].cards.length>1 ) {
                       var draw = ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
-                      console.log("Setting hand as draw");
                       this.player.hands[x].win='draw';
-                      console.log("draw if statement");
               }else if (this.dealer.hands[0].hand_value > this.player.hands[x].hand_value && this.player.hands[x].cards.length >1) {
                       this.player.hands[x].win='bust'
                       var lose = ReactDOM.render(React.createElement (Lose,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
               }else {
                       this.player.hands[x].win='bust'
+
               }
           }
     }
@@ -443,7 +458,7 @@ function Game () {
           switch (this.player.hands[0].win) {
               case 'blackjack':
                   this.player.total_won += (this.player.hands[0].bet * 1.5);
-                  this.player.bank += this.player.hands[0].bet*2;
+                  this.player.bank += this.player.hands[0].bet + this.player.total_won;
                   var msg = "YOU GOT A BLACKJACK! YOU WON $"+this.player.total_won+"!";
                   console.log(msg);
                   var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'))
@@ -662,7 +677,7 @@ function Player (name,bank) {
           var hand_count = 0;
           var held_count = 0;
           for( var x = 0; x < this.hands.length; x++ ) {
-              if (this.hands[x].held == true) {
+              if ((this.hands[x].held == true) || (this.hands[x].win == 'bust')){
                   held_count++;
               }
               if (this.hands[x].cards.length>1) {
@@ -680,11 +695,11 @@ function Player (name,bank) {
           if (this.playing) {
               console.log('playing');
               if(this.name=='dealer') {
-                  game1.deck.dealCards(1,0,'dealer');
-              }else {
-                  if (this.hands[this.hand_selected].held != true) {
+                  game1.deck.dealCards(1, 0, 'dealer');
+              } else {
+                  if ((this.hands[this.hand_selected].held != true) && (this.hands[this.hand_selected].win != 'bust'))  {
                       game1.player.hands[this.hand_selected].check_split(this.hands[this.hand_selected].cards.length);
-                      game1.deck.dealCards(1,this.hand_selected,'player');
+                      game1.deck.dealCards(1,this.hand_selected, 'player');
                       this.hands[this.hand_selected].show_card();
                       this.hands[this.hand_selected].update_score();
                       var hand_count = 0;
@@ -692,12 +707,14 @@ function Player (name,bank) {
                     //check if the new card busted the hand
                       if ( this.hands[this.hand_selected].check_bust() ) {
                           this.hands[this.hand_selected].win = 'bust';
+                          var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.hands[this.hand_selected].hand_side+"_bust"))
+
                         //check if all of the player's hands are busted including possible split hands
                           for( var x = 0; x < this.hands.length; x++ ) {
                               if( this.hands[x].cards.length > 1 ) {
                                   hand_count ++;
                               }
-                              if( this.hands[x].win== 'bust') {
+                              if (( this.hands[x].win == 'bust') || ( this.hands[x].held == true)){
                                   bust_count ++;
                                   console.log("bust"+bust_count);
                               }
@@ -746,6 +763,7 @@ function Player (name,bank) {
                   score = ReactDOM.render(React.createElement (Hand_Score,{score:this.hands[0].hand_value}),  document.getElementById('mid_score'))
               }
               game1.player.playing=true;
+              game1.first_turn = true;
               if (game1.dealer.hands[0].check_blackjack() == true) {
                   game1.check_winner();
               }else if (game1.player.hands[0].check_blackjack() == true) {
@@ -1089,8 +1107,8 @@ function Deck () {
 			this.cards = [];
       this.makeNewDeck = function (numberOfDecks) {
 					var suits = ['Clubs','Diamonds','Hearts','Spades'];
-					var faces = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-					var cardValue = [11,2,3,4,5,6,7,8,9,10,10,10,10];
+					var faces = ['A','2','2','2','2','2','7','8','9','10','J','Q','K'];
+					var cardValue = [11,11,11,11,11,11,10,8,9,10,10,10,10];
 					for( var i = 0; i < numberOfDecks; i++ ) {
 							var cardnumber = 0;
 							for(var j=0;j<suits.length;j++) {
