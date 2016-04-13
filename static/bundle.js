@@ -305,7 +305,9 @@
 	        this.setState({
 	            down: true
 	        });
-	        game1.player.split_hand(game1.player.hand_selected);
+	        if (this.props.inactive) {} else {
+	            game1.player.split_hand(game1.player.hand_selected);
+	        }
 	    },
 	    onMouseUpHandler: function onMouseUpHandler() {
 	        this.setState({
@@ -772,8 +774,8 @@
 	                    game1.deck.dealCards(1, 0, 'dealer');
 	                } else {
 	                    if (this.hands[this.hand_selected].held != true && this.hands[this.hand_selected].win != 'bust') {
-	                        game1.player.hands[this.hand_selected].check_split(this.hands[this.hand_selected].cards.length);
 	                        game1.deck.dealCards(1, this.hand_selected, 'player');
+	                        game1.player.hands[this.hand_selected].check_split(this.hands[this.hand_selected].cards.length);
 	                        this.hands[this.hand_selected].show_card();
 	                        this.hands[this.hand_selected].update_score();
 	                        var hand_count = 0;
@@ -1016,55 +1018,57 @@
 	                    total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
 	                    total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
 	                    var split_button = ReactDOM.unmountComponentAtNode(document.getElementById('split_button'));
-	                    split_button = ReactDOM.render(React.createElement(Split_Button, { bank: "$" + game1.player.bank }), document.getElementById('split_button'));
+	                    split_button = ReactDOM.render(React.createElement(Split_Button, { inactive: true }), document.getElementById('split_button'));
 	                    this.select_hand(this.hands[side].hand_side);
 	                    this.hold_hand();
 	                    this.select_hand(this.hands[2].hand_side);
 	                    this.hold_hand();
 	                } else {
-	                    this.hands[2].cards[0] = this.hands[side].cards.pop();
-	                    this.hands[side].cards_shown -= 1;
-	                    game1.deck.dealCards(1, side, 'player');
-	                    game1.deck.dealCards(1, 2, 'player');
-	                    game1.player.hands[side].show_card();
-	                    game1.player.hands[2].show_card();
-	                    game1.player.hands[2].show_card();
-	                    game1.player.hands[2].update_score();
-	                    game1.player.hands[side].update_score();
-	                    if (this.hands[side].cards[0].cardValue == 1) {
-	                        this.hands[side].cards[0].cardValue = 11;
-	                    }
-	                    if (this.hands[2].hand_value == 22) {
-	                        this.hands[2].cards[0].cardValue = 1;
-	                        this.hands[2].hand_value -= 10;
-	                        var score = ReactDOM.unmountComponentAtNode(document.getElementById('right_score'));
-	                        score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.player.hands[2].hand_value }), document.getElementById('right_score'));
-	                    }
-	                    if (this.hands[side].hand_value == 22) {
-	                        this.hands[side].cards[0].cardValue = 1;
-	                        this.hands[side].hand_value -= 10;
-	                        var score = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[side].hand_side + '_score'));
-	                        score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.player.hands[side].hand_value }), document.getElementById(this.hands[side].hand_side + '_score'));
-	                    }
-	                    this.hands[2].bet = this.hands[side].bet;
-	                    game1.player.total_bet += this.hands[2].bet;
-	                    game1.player.bank -= this.hands[2].bet;
-	                    var bet = ReactDOM.unmountComponentAtNode(document.getElementById('right_bet'));
+	                    if (this.hands[side].cards[0].face === this.hands[side].cards[1].face) {
+	                        this.hands[2].cards[0] = this.hands[side].cards.pop();
+	                        this.hands[side].cards_shown -= 1;
+	                        game1.deck.dealCards(1, side, 'player');
+	                        game1.deck.dealCards(1, 2, 'player');
+	                        game1.player.hands[side].show_card();
+	                        game1.player.hands[2].show_card();
+	                        game1.player.hands[2].show_card();
+	                        game1.player.hands[2].update_score();
+	                        game1.player.hands[side].update_score();
+	                        if (this.hands[side].cards[0].cardValue == 1) {
+	                            this.hands[side].cards[0].cardValue = 11;
+	                        }
+	                        if (this.hands[2].hand_value == 22) {
+	                            this.hands[2].cards[0].cardValue = 1;
+	                            this.hands[2].hand_value -= 10;
+	                            var score = ReactDOM.unmountComponentAtNode(document.getElementById('right_score'));
+	                            score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.player.hands[2].hand_value }), document.getElementById('right_score'));
+	                        }
+	                        if (this.hands[side].hand_value == 22) {
+	                            this.hands[side].cards[0].cardValue = 1;
+	                            this.hands[side].hand_value -= 10;
+	                            var score = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[side].hand_side + '_score'));
+	                            score = ReactDOM.render(React.createElement(Hand_Score, { score: game1.player.hands[side].hand_value }), document.getElementById(this.hands[side].hand_side + '_score'));
+	                        }
+	                        this.hands[2].bet = this.hands[side].bet;
+	                        game1.player.total_bet += this.hands[2].bet;
+	                        game1.player.bank -= this.hands[2].bet;
+	                        var bet = ReactDOM.unmountComponentAtNode(document.getElementById('right_bet'));
 
-	                    bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[2].bet }), document.getElementById('right_bet'));
+	                        bet = ReactDOM.render(React.createElement(Hand_Bet, { bet: '$' + this.hands[2].bet }), document.getElementById('right_bet'));
 
-	                    this.hands[2].chip_count = 0;
-	                    for (var z = 0; z < this.hands[side].chips.length; z++) {
-	                        var empty_chip_slot = ReactDOM.render(React.createElement(Chip_Hand, { chipNumber: this.hands[side].chips[z].chip_value, side: 'right', position: z + 1 }), document.getElementById("right_chip" + (z + 1)));
-	                        this.hands[2].chips.push(this.hands[side].chips[z]);
-	                        this.hands[2].chip_count++;
-	                    };
-	                    var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'));
-	                    var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
-	                    total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
-	                    total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
-	                    var split_button = ReactDOM.unmountComponentAtNode(document.getElementById('split_button'));
-	                    split_button = ReactDOM.render(React.createElement(Split_Button, { bank: "$" + game1.player.bank }), document.getElementById('split_button'));
+	                        this.hands[2].chip_count = 0;
+	                        for (var z = 0; z < this.hands[side].chips.length; z++) {
+	                            var empty_chip_slot = ReactDOM.render(React.createElement(Chip_Hand, { chipNumber: this.hands[side].chips[z].chip_value, side: 'right', position: z + 1 }), document.getElementById("right_chip" + (z + 1)));
+	                            this.hands[2].chips.push(this.hands[side].chips[z]);
+	                            this.hands[2].chip_count++;
+	                        };
+	                        var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'));
+	                        var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'));
+	                        total_bet = ReactDOM.render(React.createElement(Bet_Total, { total_bet: '$' + game1.player.total_bet }), document.getElementById('total_bet'));
+	                        total_bank = ReactDOM.render(React.createElement(Bank, { bank: "$" + game1.player.bank }), document.getElementById('total_bank'));
+	                        var split_button = ReactDOM.unmountComponentAtNode(document.getElementById('split_button'));
+	                        split_button = ReactDOM.render(React.createElement(Split_Button, { inactive: true }), document.getElementById('split_button'));
+	                    }
 	                }
 
 	                break;
@@ -1117,7 +1121,8 @@
 	        }
 	    };
 	    this.check_split = function (number_of_cards) {
-	        if (this.cards[0].face == this.cards[1].face && number_of_cards == 2) {
+	        if (this.cards[0].face == this.cards[1].face && number_of_cards === 2) {
+	            console.log("number" + number_of_cards);
 	            var split = ReactDOM.unmountComponentAtNode(document.getElementById('split_button'));
 	            split = ReactDOM.render(React.createElement(Split_Button, { inactive: false }), document.getElementById('split_button'));
 	        } else {
@@ -1170,7 +1175,7 @@
 	    this.makeNewDeck = function (numberOfDecks) {
 	        var suits = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
 	        var faces = ['A', '2', '2', '2', '2', '2', '7', '8', '9', '10', 'J', 'Q', 'K'];
-	        var cardValue = [11, 11, 11, 11, 11, 11, 10, 8, 9, 10, 10, 10, 10];
+	        var cardValue = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10];
 	        for (var i = 0; i < numberOfDecks; i++) {
 	            var cardnumber = 0;
 	            for (var j = 0; j < suits.length; j++) {
