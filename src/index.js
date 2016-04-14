@@ -346,44 +346,61 @@ function Game () {
   this.game_over = false;
   this.first_turn = true;
 
-  this.show_dealers_cards = function () {
+  this.reset_deck = function (numberOfDecks) {
+    this.deck = new Deck();
+    this.deck.makeNewDeck(numberOfDecks);
+    this.deck.shuffleDeck();
+  }
+
+  this.show_dealers_cards = function (initial,time) {
+    var time = time;
       console.log("showing dealers cards");
-      this.dealer.hands[0].show_card();
-      this.dealer.hands[0].show_card();
-      this.dealer.hands[0].update_score();
-      if(this.dealer.hands[0].hand_value == 22) {
-          this.dealer.hands[0].cards[0].cardValue = 1;
-          this.dealer.hands[0].hand_value -= 10;
-          console.log("hand_score"+this.dealer.hands[0].hand_value);
-          var score = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'))
+      if(initial){
+          this.dealer.hands[0].show_card();
+          this.dealer.hands[0].show_card();
+          this.dealer.hands[0].update_score();
+          if(this.dealer.hands[0].hand_value == 22) {
+              this.dealer.hands[0].cards[0].cardValue = 1;
+              this.dealer.hands[0].hand_value -= 10;
+              console.log("hand_score"+this.dealer.hands[0].hand_value);
+              var score = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'))
+              score = ReactDOM.render(React.createElement (Hand_Score,{score:this.dealer.hands[0].hand_value}),  document.getElementById('dealer_score'))
+          }
 
-          score = ReactDOM.render(React.createElement (Hand_Score,{score:this.dealer.hands[0].hand_value}),  document.getElementById('dealer_score'))
-      }
-
-    loop1:  while (true) {
-        console.log("loop+");
           if(this.dealer.hands[0].hand_value <= 16) {
               console.log("dealer under 16, hitting card");
-              this.deck.dealCards(1,0,'dealer');
-              this.dealer.hands[0].show_card();
-              this.dealer.hands[0].update_score();
-              if ( this.dealer.hands[0].check_bust() == true ) {
-                  this.dealer.hands[0].win = 'bust';
-              }
-              continue loop1;
+              setTimeout(function(){
+                game1.show_dealers_cards(false,time+475)
+              },time)
           }else if(this.dealer.hands[0].hand_value <= 21 && this.dealer.hands[0].hand_value >= 17 ) {
               console.log(this.dealer.hands[0].hand_value);
               this.check_winner();
-              break loop1;
+          }
+      }else {
+          this.deck.dealCards(1,0,'dealer');
+          this.dealer.hands[0].show_card();
+          this.dealer.hands[0].update_score();
+          if ( this.dealer.hands[0].check_bust() == true ) {
+              this.dealer.hands[0].win = 'bust';
+          }
+          if(this.dealer.hands[0].hand_value <= 16) {
+              console.log("dealer under 16, hitting card");
+              setTimeout(function(){
+                game1.show_dealers_cards(false,time+475)
+              },time)
+          }else if(this.dealer.hands[0].hand_value <= 21 && this.dealer.hands[0].hand_value >= 17 ) {
+              console.log(this.dealer.hands[0].hand_value);
+              this.check_winner();
           }else if(this.dealer.hands[0].hand_value > 21) {
               console.log(this.dealer.hands[0].hand_value+"bustdealer");
               if ( this.dealer.hands[0].check_bust() == true) {
                   this.dealer.hands[0].win = 'bust';
               } else {
-                  continue loop1;
-              }
+                setTimeout(function(){
+                  game1.show_dealers_cards(false,time+475)
+                },time)
+                }
               this.check_winner()
-              break loop1;
           }
       }
   };
@@ -653,7 +670,7 @@ function Player (name,bank) {
               this.hands[this.hand_selected].chip_count++;
               var mid_bet = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[this.hand_selected].hand_side+'_bet'))
               mid_bet = ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.hands[this.hand_selected].bet}),  document.getElementById(this.hands[this.hand_selected].hand_side+'_bet'))
-              if(this.hands[this.hand_selected].chip_count>8){
+              if(this.hands[this.hand_selected].chip_count>6){
                 this.hands[this.hand_selected].combine_chips();
               }
           }else if(bet > this.bank){
@@ -713,13 +730,16 @@ function Player (name,bank) {
               }
           }
           if(held_count == hand_count) {
-              game1.show_dealers_cards();
+              game1.show_dealers_cards(true,500);
           }
       }
   };
 
 	this.hit_card = function (){
       if(game1.game_over==false){
+        if( game1.deck.cards.length <=4 ) {
+            game1.reset_deck(5);
+        }
           if (this.playing) {
               console.log('playing');
               if(this.name=='dealer') {
@@ -880,7 +900,7 @@ function Player (name,bank) {
                     total_bet = ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$'+game1.player.total_bet}),  document.getElementById('total_bet'))
                     total_bank = ReactDOM.render(React.createElement (Bank,{bank:"$"+game1.player.bank}),  document.getElementById('total_bank'))
                     left_score = ReactDOM.render(React.createElement (Hand_Score,{score:game1.player.hands[1].hand_value}),  document.getElementById('left_score'))
-                    game1.show_dealers_cards();
+                    game1.show_dealers_cards(true,500);
                 }else {
                     this.hands[1].cards[0] = this.hands[0].cards.pop()
                     this.hands[0].cards_shown -= 1;
@@ -1169,7 +1189,7 @@ function Deck () {
       this.makeNewDeck = function (numberOfDecks) {
 					var suits = ['Clubs','Diamonds','Hearts','Spades'];
 					var faces = ['A','2','2','2','2','2','7','8','9','10','J','Q','K'];
-					var cardValue = [11,2,3,4,5,6,7,8,9,10,10,10,10];
+					var cardValue = [11,2,2,2,2,2,2,2,9,10,10,10,10];
 					for( var i = 0; i < numberOfDecks; i++ ) {
 							var cardnumber = 0;
 							for(var j=0;j<suits.length;j++) {
@@ -1215,18 +1235,9 @@ function Deck () {
 
 function main() {
   inject_objects();
-
-
-
-  game1.deck.makeNewDeck(5);
-
-  game1.deck.shuffleDeck();
+  game1.reset_deck(5);
   game1.dealer.hands.push(new Hand('dealer'));
   game1.player.hands.push(new Hand('mid'),new Hand('left'),new Hand('right'));
-
-
-
-
 }
 var game1 = new Game();
 main();
