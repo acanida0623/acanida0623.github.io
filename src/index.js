@@ -1,6 +1,7 @@
 var React = require('react')
 var ReactDOM = require('react-dom')
 
+import keydown from 'react-keydown';
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
 var Arrow = React.createClass ({
@@ -155,15 +156,18 @@ var Hit_Button = React.createClass ({
          down: false
      };
  },
-
+componentWillMount: function(){
+    document.addEventListener("keyPress", this._handleEscKey, false);
+},
  onMouseDownHandler: function() {
      this.setState({
          down: true
      });
     game1.player.hit_card();
-
-
  },
+ keyDown: function(evt) {
+        console.log(e.type, e.which, e.timeStamp);
+    },
  onMouseUpHandler: function() {
      this.setState({
          down: false
@@ -177,7 +181,7 @@ var Hit_Button = React.createClass ({
       }else if (this.state.down){
         hoverpic="hitbuttondown.png"
       }
-      return <img onMouseDown={this.onMouseDownHandler} onMouseUp={this.onMouseUpHandler} className={"hit_button"} src={"static/images/buttons/"+hoverpic} />
+      return <img onKeyDown = {this.keyDown} onMouseDown={this.onMouseDownHandler} onMouseUp={this.onMouseUpHandler} className={"hit_button"} src={"static/images/buttons/"+hoverpic} />
   }
 });
 
@@ -307,7 +311,7 @@ var Blank = React.createClass ({
 
 
 function inject_objects() {
-var total_bank = ReactDOM.render(React.createElement (Bank,{bank:'$2000'}),  document.getElementById('total_bank'))
+var total_bank = ReactDOM.render(React.createElement (Bank,{bank:'$3000'}),  document.getElementById('total_bank'))
 var total_bet = ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$0'}),  document.getElementById('total_bet'))
 var total_win = ReactDOM.render(React.createElement (Win,{win_amount:'$0'}),  document.getElementById('total_win'))
 var stand_button= ReactDOM.render(React.createElement (Stand_Button),  document.getElementById('stand_button'))
@@ -335,7 +339,7 @@ var bet_chip100 = ReactDOM.render(React.createElement (Chip_Bet,{chipNumber:'100
 
 
 function Game () {
-	this.player = new Player("Andrew",2000);
+	this.player = new Player("Andrew",3000);
   this.dealer = new Player("Dealer",0);
   this.blackjack = false;
 	this.deck = new Deck();
@@ -458,6 +462,9 @@ function Game () {
 
   };
   this.calculate_win = function () {
+      var split_button = ReactDOM.unmountComponentAtNode(document.getElementById('split_button'))
+      split_button = ReactDOM.render(React.createElement (Split_Button,{inactive:true}),  document.getElementById('split_button'))
+
       if (this.blackjack) {
           console.log("blackjack=true");
           switch (this.player.hands[0].win) {
@@ -614,6 +621,19 @@ function Player (name,bank) {
       total_bank = ReactDOM.render(React.createElement (Bank,{bank:"$"+game1.player.bank}),  document.getElementById('total_bank'))
   };
 
+  this.bet_chip_combined = function(chip_amount) {
+    var bet = parseInt(chip_amount);
+
+    this.hands[this.hand_selected].bet += bet;
+
+    this.hands[this.hand_selected].chips.push(new Chip(bet))
+    var empty_chip_slot = this.hands[this.hand_selected].hand_side+"_chip"+(this.hands[this.hand_selected].chip_count+1);
+    var current_position = (this.hands[this.hand_selected].chip_count+1);
+    var empty_chip_slot = ReactDOM.render(React.createElement (Chip_Hand,{chipNumber:chip_amount,side:this.hands[this.hand_selected].hand_side,position:current_position}),  document.getElementById(empty_chip_slot))
+    this.hands[this.hand_selected].chip_count++;
+
+  }
+
 	this.bet_chip = function(chip_amount) {
       var bet = parseInt(chip_amount);
       if(this.playing==false){
@@ -633,6 +653,9 @@ function Player (name,bank) {
               this.hands[this.hand_selected].chip_count++;
               var mid_bet = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[this.hand_selected].hand_side+'_bet'))
               mid_bet = ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.hands[this.hand_selected].bet}),  document.getElementById(this.hands[this.hand_selected].hand_side+'_bet'))
+              if(this.hands[this.hand_selected].chip_count>8){
+                this.hands[this.hand_selected].combine_chips();
+              }
           }else if(bet > this.bank){
             console.log("Hey! You Are Broke!");
           }
@@ -750,6 +773,8 @@ function Player (name,bank) {
               game1.dealer.hands[0].cards.length = 0;
               game1.dealer.hands[0].hand_value = 0;
               game1.dealer.hands[0].cards_shown = 1;
+              var bet = ReactDOM.unmountComponentAtNode(document.getElementById("left_bet"))
+              bet = ReactDOM.unmountComponentAtNode(document.getElementById("right_bet"))
               var dealer_score = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'))
               var left_score = ReactDOM.unmountComponentAtNode(document.getElementById('left_score'))
               var mid_score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
@@ -1023,6 +1048,7 @@ function Hand (side) {
 		this.chip_count = 0;
     this.cards_shown = 1
     this.chips = []
+    this.combined_chips = []
     this.held = false;
 
     this.show_card = function (first_turn) {
@@ -1067,6 +1093,34 @@ function Hand (side) {
             split = ReactDOM.render(React.createElement (Split_Button,{inactive:true}),  document.getElementById('split_button'))
         }
     }
+
+    this.combine_chips = function () {
+        var total = this.bet
+        var chip_list = [100,50,25,10,5,1]
+        chip_list.map(function(x){
+            var number_of_chips = Math.floor(total/x)
+            game1.player.hands[game1.player.hand_selected].combined_chips.push({
+              chip_value:x,
+              chip_count:number_of_chips
+            })
+            total -= number_of_chips * x
+        })
+
+        console.log(game1.player.hands[game1.player.hand_selected].combined_chips);
+        game1.unmount_chips();
+        console.log(game1.player.hands[game1.player.hand_selected].combined_chips);
+
+        game1.player.hands[game1.player.hand_selected].combined_chips.map(function(x){
+
+            for( var y = 0; y < x.chip_count; y++ ) {
+              console.log(1);
+                game1.player.bet_chip_combined(x.chip_value)
+            }
+        })
+        game1.player.hands[game1.player.hand_selected].combined_chips.length = 0;
+    }
+
+
 
     this.update_score = function () {
           this.hand_value = 0;
