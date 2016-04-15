@@ -98,8 +98,8 @@ body {
   height: 100%;
   overflow: hidden;
 
-	display: flex;
-flex-direction: column;
+	display: -webkit-flex;
+-webkit-flex-direction: column;
 }
 
 
@@ -121,9 +121,10 @@ flex-direction: column;
 	background-image: url("images/blackjackbackground.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
-	display: flex;
+	display: -webkit-flex;
 	height: 100vh;
-	flex-direction: column;
+	width:100%;
+	-webkit-flex-direction: column;
 	min-width: 1440;
 	min-height: 840;
 }
@@ -137,19 +138,21 @@ flex-direction: column;
 
 
 .left_hand {
-	display: flex;
-	flex: 3;
+	display: -webkit-flex;
+	-webkit-flex: 3;
 
 }
 
 .bet_chips {
-	display:flex;
-	flex: 0;
-	margin-top: -5vh;
+	display:-webkit-flex;
+	position: absolute;
+	margin-top: -20vh;
+	width: 25%
+
 }
 
 .bet_chips div {
-	flex: 0 12%;
+	-webkit-flex: 0 50%;
 
 
 }
@@ -195,14 +198,14 @@ flex-direction: column;
 
 .mid_board {
 
-	display: flex;
-	flex:3;
+	display: -webkit-flex;
+	-webkit-flex:3;
 }
 
 
 
 .left_top {
-	flex: .98;
+	-webkit-flex: .98;
 }
 
 .left_pointer {
@@ -235,7 +238,7 @@ flex-direction: column;
 	margin-top: -10vh;
 }
 .left_cards {
-	flex: 1.5;
+	-webkit-flex: 1.5;
 
 }
 
@@ -279,15 +282,15 @@ flex-direction: column;
 }
 
 .left_bottom {
-	display: flex;
-	flex: .25;
+	display: -webkit-flex;
+	-webkit-flex: .25;
 
 }
 .left_bet{
-	flex: .5;
+	-webkit-flex: .5;
 }
 .left_chips{
-	flex: 2;
+	-webkit-flex: 2;
 
 }
 .left_chips div img {
@@ -441,14 +444,14 @@ flex-direction: column;
 
 .left {
 
-	flex: 1;
-	display: flex;
-	flex-direction: column;
+	-webkit-flex: 1;
+	display: -webkit-flex;
+	-webkit-flex-direction: column;
 }
 
 
 .dealer {
-	flex: 1.75;
+	-webkit-flex: 1.75;
 
 }
 
@@ -550,11 +553,57 @@ flex-direction: column;
 	z-index: 100;
 }
 .mid_bust{
+position: absolute;
+margin-top: 18vh;
+z-index: 37;
+}
 
+.mid_money {
+display: -webkit-flex;
 	position: absolute;
-	margin-left:10%;
-	margin-top: 5vh;
-	z-index: 100;
+	margin-top: 28vh;
+	margin-left: 12%;
+	height: 5vh;
+	width:10%;
+	z-index: 37;
+}
+
+.mid_money img {
+	-webkit-flex: 1;
+	width:5%;
+	height: 4vh;
+}
+.busted {
+margin-left:20%;
+width: 70%;
+height: 9vh;
+}
+
+.held {
+	margin-left:52%;
+	width: 70%;
+	height: 9vh;
+}
+
+.blackjack {
+margin-left:12%;
+width: 60%;
+height: 9vh;
+}
+.winner {
+margin-left:62%;
+width: 60%;
+height: 9vh;
+}
+.loser {
+margin-left:55%;
+width: 60%;
+height: 9vh;
+}
+.draw {
+margin-left:45%;
+width: 60%;
+height: 9vh;
 }
 .right_bust{
 
@@ -565,12 +614,12 @@ flex-direction: column;
 	z-index: 100;
 }
 .mid_held{
-
 	position: absolute;
-	margin-left:10%;
+	margin-left:0%;
 	margin-top: -25vh;
-	z-index: 100;
+	z-index: 50;
 }
+
 .left_held{
 
 	position: absolute;
@@ -586,7 +635,7 @@ flex-direction: column;
 	z-index: 100;
 }
 .mid_top {
-	flex: .5;
+	-webkit-flex: .5;
 }
 
 .mid_pointer {
@@ -618,7 +667,7 @@ flex-direction: column;
 	margin-top: -10vh;
 }
 .mid_cards {
-	flex: 2;
+	-webkit-flex: 2;
 
 }
 
@@ -662,15 +711,15 @@ flex-direction: column;
 }
 
 .mid_bottom {
-	display: flex;
-	flex: .5;
+	display: -webkit-flex;
+	-webkit-flex: .5;
 
 }
 .mid_bet{
-	flex: .5;
+	-webkit-flex: .5;
 }
 .mid_chips{
-	flex: 2;
+	-webkit-flex: 2;
 
 }
 .mid_chips div img {
@@ -934,19 +983,19 @@ flex-direction: column;
 
 .mid {
 
-	flex: 1;
-	display: flex;
-	flex-direction: column;
+	-webkit-flex: 1;
+	display: -webkit-flex;
+	-webkit-flex-direction: column;
 }
 .right {
 
-	flex: 1;
-	display: flex;
-	flex-direction: column;
+	-webkit-flex: 1;
+	display: -webkit-flex;
+	-webkit-flex-direction: column;
 }
 
 .right_top {
-	flex: .7;
+	-webkit-flex: .7;
 }
 
 .right_pointer {
@@ -979,7 +1028,7 @@ flex-direction: column;
 	margin-top: -20vh;
 }
 .right_cards {
-	flex: 1.5;
+	-webkit-flex: 1.5;
 
 }
 
@@ -1023,15 +1072,15 @@ flex-direction: column;
 }
 
 .right_bottom {
-	display: flex;
-	flex: .25;
+	display: -webkit-flex;
+	-webkit-flex: .25;
 
 }
 .right_bet{
-	flex: .5;
+	-webkit-flex: .5;
 }
 .right_chips{
-	flex: 2;
+	-webkit-flex: 2;
 
 }
 .right_chips div img {
@@ -1134,12 +1183,11 @@ flex-direction: column;
 }
 
 .logo{
-	flex: 0 ;
-
+	-webkit-flex: 0 17vh;
 	width: 55vh;
 	margin-left: 34%;
-
 }
+
 
 .buttons {
 	margin-left: 37%;
@@ -1155,8 +1203,14 @@ flex-direction: column;
 	position: absolute;
 	margin-left: 67%;
 	margin-top: 13.5vh;
+	height: 8vh;
+	width: 7vw
+}
 
-
+.double_button {
+	position: absolute;
+	margin-left: 77%;
+	margin-top: 13.5vh;
 	height: 8vh;
 	width: 7vw
 }
@@ -1166,10 +1220,10 @@ flex-direction: column;
 	border: 0;
 	position: absolute;
 
-	margin-left:4%;
-	margin-top:3.5vh;
-	height:100%;
-	width: 10vw;
+	margin-left:5.1%;
+	margin-top:4.7vh;
+	height:16vh;
+	width: 9.5vw;
 
 }
 
@@ -1178,33 +1232,33 @@ flex-direction: column;
 	border: 0;
 	position: absolute;
 
-	margin-left:59.3%;
-	margin-top:3.5vh;
-	height:18vh;
-	width: 10vw;
+	margin-left:60%;
+	margin-top:4.7vh;
+	height:16vh;
+	width: 9.5vw;
 
 }
 
 .bottom {
-	flex:1.2;
+	-webkit-flex:1.2;
 
-	display: flex;
-	flex-direction: column;
+	display: -webkit-flex;
+	-webkit-flex-direction: column;
 	min-width: 1440;
 }
 
 .bottom_bar {
 
 
-	flex:2;
+	-webkit-flex:2;
 
 
 	background-image: url("images/bottom_bar.png");
 	background-repeat:no-repeat;
-	background-size:  100%;
+	background-size:  100% 100%;
 
 	min-width: 1440;
-	display: flex;
+	display: -webkit-flex;
 
 }
 .bank_label {
