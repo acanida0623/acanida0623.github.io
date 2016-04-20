@@ -1,10 +1,65 @@
+if (document.images) {
+  var list = []
+    for( var x = 1; x < 54; x++ ) {
+        list[x] = new Image()
+        var src_string = "static/images/cards/"+x+".png"
+        list[x].src = src_string
+    }
+    list.length = 0;
+    for( var x = 0; x < 35; x++ ) {
+        list[x] = new Image()
+    }
+
+    list[0].src="static/images/buttons/win.png"
+    list[1].src="static/images/buttons/lose.png"
+    list[2].src="static/images/buttons/draw.png"
+    list[3].src="static/images/buttons/busted.png"
+    list[4].src="static/images/buttons/held.png"
+    list[5].src="hitbuttondown.png"
+    list[6].src="standbuttondown.png"
+    list[7].src="split.png"
+    list[8].src="splitdown.png"
+    list[9].src="double.png"
+    list[10].src="doubledown.png"
+    list[11].src="static/images/buttons/blackjack.png"
+    list[12].src="static/images/numbers/0.png"
+    list[13].src="static/images/numbers/0red.png"
+    list[14].src="static/images/numbers/1.png"
+    list[15].src="static/images/numbers/1red.png"
+    list[16].src="static/images/numbers/2.png"
+    list[17].src="static/images/numbers/2red.png"
+    list[18].src="static/images/numbers/3.png"
+    list[19].src="static/images/numbers/3red.png"
+    list[20].src="static/images/numbers/4.png"
+    list[21].src="static/images/numbers/4red.png"
+    list[22].src="static/images/numbers/5.png"
+    list[23].src="static/images/numbers/5red.png"
+    list[24].src="static/images/numbers/6.png"
+    list[25].src="static/images/numbers/6red.png"
+    list[26].src="static/images/numbers/7.png"
+    list[27].src="static/images/numbers/7red.png"
+    list[28].src="static/images/numbers/8.png"
+    list[29].src="static/images/numbers/8red.png"
+    list[30].src="static/images/numbers/9.png"
+    list[31].src="static/images/numbers/9red.png"
+    list[32].src="static/images/numbers/blank.png"
+    list[33].src="static/images/numbers/money.png"
+    list[34].src="static/images/numbers/moneyred.png"
+
+}
 window.onload = function() {
-console.log("loaded");
+  document.getElementById("loadingtext").style.display = "none";
+  document.getElementById("preloader").style.display = "none";
+  document.getElementById("blackback").style.display = "none";
+
+
+
+
+
+
 };
 var React = require('react')
 var ReactDOM = require('react-dom')
-
-import keydown from 'react-keydown';
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
 var Arrow = React.createClass ({
@@ -381,10 +436,7 @@ var hit_button= ReactDOM.render(React.createElement (Hit_Button),  document.getE
 var split_button=ReactDOM.render(React.createElement (Split_Button,{inactive:true}), document.getElementById('split_button'))
 var double_button=ReactDOM.render(React.createElement (Double_Button,{inactive:true}), document.getElementById('double_button'))
 
-var left_arrow = ReactDOM.render(React.createElement (Arrow,{visible:'hidden',side:'left'}),  document.getElementById('left_top'))
-var mid_arrow = ReactDOM.render(React.createElement (Arrow,{visible:'show',side:'mid'}),  document.getElementById('mid_top'))
-var right_arrow = ReactDOM.render(React.createElement (Arrow,{visible:'hidden',side:'right'}),  document.getElementById('right_top'))
-var dealer_score = ReactDOM.render(React.createElement (Hand_Score,{score:'??'}),  document.getElementById('dealer_score'))
+var dealer_score = ReactDOM.render(React.createElement (Hand_Score,{score:''}),  document.getElementById('dealer_score'))
 var left_score = ReactDOM.render(React.createElement (Hand_Score,{score:''}),  document.getElementById('left_score'))
 var mid_score = ReactDOM.render(React.createElement (Hand_Score,{score:''}),  document.getElementById('mid_score'))
 var right_score = ReactDOM.render(React.createElement (Hand_Score,{score:''}),  document.getElementById('right_score'))
@@ -398,6 +450,7 @@ var bet_chip25 = ReactDOM.render(React.createElement (Chip_Bet,{chipNumber:'25'}
 var bet_chip50 = ReactDOM.render(React.createElement (Chip_Bet,{chipNumber:'50'}),  document.getElementById('bet_chip50'))
 var bet_chip100 = ReactDOM.render(React.createElement (Chip_Bet,{chipNumber:'100'}),  document.getElementById('bet_chip100'))
 };
+
 
 
 
@@ -438,7 +491,7 @@ function Game () {
               },time)
           }else if(this.dealer.hands[0].hand_value <= 21 && this.dealer.hands[0].hand_value >= 17 ) {
               console.log(this.dealer.hands[0].hand_value);
-              this.check_winner();
+              this.round_completed();
           }
       }else {
           this.deck.dealCards(1,0,'dealer');
@@ -454,12 +507,12 @@ function Game () {
               },time)
           }else if(this.dealer.hands[0].hand_value <= 21 && this.dealer.hands[0].hand_value >= 17 ) {
               console.log(this.dealer.hands[0].hand_value);
-              this.check_winner();
+              this.round_completed();
           }else if(this.dealer.hands[0].hand_value > 21) {
               console.log(this.dealer.hands[0].hand_value+"bustdealer");
               if ( this.dealer.hands[0].check_bust() == true) {
                   this.dealer.hands[0].win = 'bust';
-                  this.check_winner()
+                  this.round_completed()
               } else {
                 setTimeout(function(){
                   game1.show_dealers_cards(false,time+475)
@@ -470,18 +523,18 @@ function Game () {
       }
   };
   /*Called once at first draw and then when hold button is placed on all hands */
-  this.check_winner = function() {
+  this.round_completed = function() {
     if(this.first_turn == true) {
         console.log("first turn");
         if (this.player.hands[0].check_blackjack()==true) {
             this.player.hands[0].win = 'blackjack';
             this.blackjack = true;
-            var bj= ReactDOM.render(React.createElement (Blackjack),  document.getElementById("mid_bust"))
+            ReactDOM.render(React.createElement (Blackjack),  document.getElementById("mid_player_messages"))
 
         } if(this.dealer.hands[0].check_blackjack()==true) {
           console.log("dealerbj");
-          var bj= ReactDOM.render(React.createElement (Blackjack),  document.getElementById("mid_held"))
-          var lose= ReactDOM.render(React.createElement (Lose),  document.getElementById("mid_bust"))
+          ReactDOM.render(React.createElement (Blackjack),  document.getElementById("mid_dealer_messages"))
+          ReactDOM.render(React.createElement (Lose),  document.getElementById("mid_player_messages"))
 
             this.player.hands[0].win = 'bust';
             this.blackjack = true;
@@ -489,8 +542,8 @@ function Game () {
         }if(this.player.hands[0].check_blackjack()==true && this.dealer.hands[0].check_blackjack()==true) {
           console.log("tie");
             this.player.hands[0].win="draw";
-            var draws = ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById("mid_held"))
-            draws = ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById("mid_bust"))
+            ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById("mid_dealer_messages"))
+            ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById("mid_player_messages"))
 
             this.blackjack = true;
         }
@@ -506,40 +559,40 @@ function Game () {
                           console.log("hand_score"+this.player.hands[x].hand_value);
                       }
                   }
-                  var score = ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+'_score'))
-                  score = ReactDOM.render(React.createElement (Hand_Score,{score:this.player.hands[x].hand_value}),  document.getElementById(this.player.hands[x].hand_side+'_score'))
+                  ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+'_score'))
+                  ReactDOM.render(React.createElement (Hand_Score,{score:this.player.hands[x].hand_value}),  document.getElementById(this.player.hands[x].hand_side+'_score'))
                   if (this.player.hands[x].hand_value > 21 && this.player.hands[x].cards.length>1) {
                       this.player.hands[x].win='bust';
-                      var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
+                      ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_player_messages"))
                       this.print_win_loss(this.player.hands[x].bet*-1,this.player.hands[x].hand_side)
                   }
               }else if (this.player.hands[x].hand_value > this.dealer.hands[0].hand_value && this.player.hands[x].cards.length>1) {
                     if (this.player.hands[x].hand_value > 21) {
                         this.player.hands[x].win='bust';
-                        var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
+                        ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_player_messages"))
                         this.print_win_loss(this.player.hands[x].bet*-1,this.player.hands[x].hand_side)
                     }else {
                         this.player.hands[x].win='true';
-                        var win = ReactDOM.render(React.createElement (Winner,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
+                        ReactDOM.render(React.createElement (Winner,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_player_messages"))
                         this.print_win_loss(this.player.hands[x].bet,this.player.hands[x].hand_side)
                     }
             }else if (this.dealer.hands[0].hand_value > 21) {
-                      var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById("mid_held"))
+                      ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById("mid_dealer_messages"))
                   if (this.player.hands[x].hand_value > 21) {
                       this.player.hands[x].win='bust';
-                      var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
+                      ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_player_messages"))
                       this.print_win_loss(this.player.hands[x].bet*-1,this.player.hands[x].hand_side)
                   }else if(this.player.hands[x].cards.length>1) {
-                      var win = ReactDOM.render(React.createElement (Winner,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
+                      ReactDOM.render(React.createElement (Winner,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_player_messages"))
                       this.player.hands[x].win='true';
                       this.print_win_loss(this.player.hands[x].bet,this.player.hands[x].hand_side)
                   }
               }else if (this.dealer.hands[0].hand_value == this.player.hands[x].hand_value && this.player.hands[x].cards.length>1 ) {
-                      var draw = ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
+                      ReactDOM.render(React.createElement (Draw,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_player_messages"))
                       this.player.hands[x].win='draw';
               }else if (this.dealer.hands[0].hand_value > this.player.hands[x].hand_value && this.player.hands[x].cards.length >1) {
                       this.player.hands[x].win='bust'
-                      var lose = ReactDOM.render(React.createElement (Lose,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_bust"))
+                      ReactDOM.render(React.createElement (Lose,{visible:'show'}),  document.getElementById(this.player.hands[x].hand_side+"_player_messages"))
                       this.print_win_loss(this.player.hands[x].bet*-1,this.player.hands[x].hand_side)
               }else {
                       this.player.hands[x].win='bust'
@@ -622,8 +675,8 @@ function Game () {
           if (this.player.total_won > 0) {
               var msg = "YOU WON $"+this.player.total_won+"!";
               console.log(msg);
-              var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'))
-              var bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
+              ReactDOM.unmountComponentAtNode(document.getElementById('total_win'))
+              ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
               total_win = ReactDOM.render(React.createElement (Win,{win_amount:'$'+this.player.total_won}),  document.getElementById('total_win'))
               bank = ReactDOM.render(React.createElement (Bank,{bank:"$"+this.player.bank}),  document.getElementById('total_bank'))
 
@@ -631,8 +684,8 @@ function Game () {
           }else {
               var msg = "YOU LOST $"+this.player.total_won*-1+"!";
               console.log(msg);
-              var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'))
-              var bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
+              ReactDOM.unmountComponentAtNode(document.getElementById('total_win'))
+              ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
               total_win = ReactDOM.render(React.createElement (Win,{win_amount:'$'+this.player.total_won}),  document.getElementById('total_win'))
               bank = ReactDOM.render(React.createElement (Bank,{bank:"$"+this.player.bank}),  document.getElementById('total_bank'))
               this.reset_game(false);
@@ -707,25 +760,103 @@ function Game () {
       }
     }
 
+    console.log("SIDE "+side)
+    ReactDOM.render(React.createElement (Money,{money_sign:money,thous_place:thous,hunds_place:hunds,tens_place:tens,ones_place:ones,side:side}),  document.getElementById(side+'_money'))
+    }
 
-     var money = ReactDOM.render(React.createElement (Money,{money_sign:money,thous_place:thous,hunds_place:hunds,tens_place:tens,ones_place:ones,side:side}),  document.getElementById('mid_money'))
+  this.unmount_chips = function (side) {
+        side.map(function(x){
+          console.log(x);
+            for(var z=0; z < game1.player.hands[x].chips.length; z++) {
+                ReactDOM.unmountComponentAtNode(document.getElementById(game1.player.hands[x].hand_side+'_chip'+(z+1)));
+            }
+            game1.player.hands[x].bet = 0;
+            game1.player.hands[x].chip_count = 0;
+            game1.player.hands[x].chips.length = 0;
+            game1.game_over = false;
+        })
+    };
 
+  this.unmount_cards = function () {
+    for(var x=0;x<this.player.hands.length;x++) {
+        for(var y=0;y<this.player.hands[x].cards.length;y++){
+            ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+"_card"+(y+1)));
+            ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+"_money"));
+        }
+        this.player.hands[x].cards.length=0;
+        this.player.hands[x].held = false;
+        this.player.hands[x].win=false;
+        this.player.hands[x].hand_value = 0;
+        this.player.hands[x].cards_shown = 1;
+        ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+"_dealer_messages"))
+        ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+"_player_messages"))
+    }
+    for(var a=0; a < this.dealer.hands[0].cards.length; a++) {
+        ReactDOM.unmountComponentAtNode(document.getElementById("dealer_card"+(a+1)));
+    }
+    this.dealer.hands[0].cards.length = 0;
+    this.dealer.hands[0].hand_value = 0;
+    this.dealer.hands[0].cards_shown = 1;
+    ReactDOM.unmountComponentAtNode(document.getElementById("left_bet"))
+    ReactDOM.unmountComponentAtNode(document.getElementById("right_bet"))
+    ReactDOM.unmountComponentAtNode(document.getElementById("mid_bet"))
+    ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'))
+    ReactDOM.unmountComponentAtNode(document.getElementById('left_score'))
+    ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
+    ReactDOM.unmountComponentAtNode(document.getElementById('right_score'))
   }
 
+  this.deal_first_hand = function () {
+    this.player.select_hand('mid');
+    ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.player.hands[0].bet}),  document.getElementById('mid_bet'))
+    this.deck.dealCards(2,0,'dealer');//(numberofCards,hand,dealer/player) hand 0=mid 1=left 2=right
+    this.deck.dealCards(2,0,'player');
+    this.dealer.hands[0].show_card(true);//true = dealers first cards, hide first card and show second only need to call once
+    this.player.hands[0].show_card();//call to show the next card that has not been shown
+    this.player.hands[0].show_card();
+    this.player.hands[0].update_score();
+    this.player.hands[0].check_split(this.player.hands[0].cards.length);
+    if(this.player.hands[0].hand_value == 22) {
+        this.player.hands[0].cards[0].cardValue = 1;
+        this.player.hands[0].hand_value -= 10;
+        ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
+        ReactDOM.render(React.createElement (Hand_Score,{score:this.player.hands[0].hand_value}),  document.getElementById('mid_score'))
+    }
+    this.player.playing=true;
+    this.first_turn = true;
+    if (this.dealer.hands[0].check_blackjack() == true) {
+        this.round_completed();
+    }else if (this.player.hands[0].check_blackjack() == true) {
+        this.round_completed();
+    }else {
+        this.first_turn = false;
+        this.player.hands[0].check_double_down();
+    }
+  }
 
-  this.unmount_chips = function () {
-      for(var x=0;x<game1.player.hands.length;x++) {
-          for(var z=0; z < game1.player.hands[x].chips.length; z++) {
-              var newchip= ReactDOM.unmountComponentAtNode(document.getElementById(game1.player.hands[x].hand_side+'_chip'+(z+1)));
-          }
-          game1.player.hands[x].bet = 0;
-          game1.player.hands[x].chip_count = 0;
-          game1.player.hands[x].chips.length = 0;
-          game1.game_over = false;
+  this.check_hold_count = function () {
+      var hand_count = 0;
 
+        var held_count = this.player.hands.map(function(x){
+        var length = x.cards.length
+        if(length !== 0) {
+          hand_count++
+        }
+        var win = x.win
+        var held = x.held
+        return {
+          win: win,
+          held: held
+        }
+      }).filter(function(x){
+          return ((x.win === 'bust') || (x.held === true))
+      })
+
+      if (held_count.length === hand_count) {
+          this.show_dealers_cards(true,500)
       }
 
-    };
+  }
 
   this.reset_game = function(win) {
       this.player.total_won = 0
@@ -734,10 +865,10 @@ function Game () {
       this.first_turn = true;
       this.player.split_count = 0;
       this.player.total_bet = 0;
-      this.player.select_hand('mid');
+
       this.player.hands[0].check_double_down();
       for(var x=0;x<this.player.hands.length;x++) {
-          var bet = ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+"_bet"))
+          ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+"_bet"))
           for(var z=0; z < this.player.hands[x].chips.length; z++) {
               if(win==true) {
                   document.querySelector("."+this.player.hands[x].hand_side+'_chip'+(z+1)).className = 'mid_chip_win';
@@ -746,11 +877,11 @@ function Game () {
               }
             //var newchip = ReactDOM.render(React.createElement (Chip_Hand,{visible:'hidden', chipNumber:'5',side:this.player.hands[x].hand_side,position:z+1}),  document.getElementById(this.player.hands[x].hand_side+'_chip'+(z+1)))
           }
-
-
-
       }
-      setTimeout(game1.unmount_chips,500);
+      setTimeout(function(){
+          game1.unmount_chips([0,1,2]);
+      },500);
+      this.player.select_hand('none');
   };
 
 };
@@ -772,14 +903,14 @@ function Player (name,bank) {
       this.hands[0].bet += bet;
       this.total_bet += bet;
       this.bank -= bet;
-      var mid_chip1 = ReactDOM.unmountComponentAtNode(document.getElementById('mid_chip1'))
-      var mid_bet = ReactDOM.unmountComponentAtNode(document.getElementById('mid_bet'))
-      var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'))
-      var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
-      mid_chip1 = ReactDOM.render(React.createElement (Chip_Hand,{visible:'show', chipNumber:bet,side:'mid',position:'1'}),  document.getElementById('mid_chip1'))
-      mid_bet = ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+bet}),  document.getElementById('mid_bet'))
-      total_bet = ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$'+game1.player.total_bet}),  document.getElementById('total_bet'))
-      total_bank = ReactDOM.render(React.createElement (Bank,{bank:"$"+game1.player.bank}),  document.getElementById('total_bank'))
+      ReactDOM.unmountComponentAtNode(document.getElementById('mid_chip1'))
+      ReactDOM.unmountComponentAtNode(document.getElementById('mid_bet'))
+      ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'))
+      ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
+      ReactDOM.render(React.createElement (Chip_Hand,{visible:'show', chipNumber:bet,side:'mid',position:'1'}),  document.getElementById('mid_chip1'))
+      ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+bet}),  document.getElementById('mid_bet'))
+      ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$'+game1.player.total_bet}),  document.getElementById('total_bet'))
+      ReactDOM.render(React.createElement (Bank,{bank:"$"+game1.player.bank}),  document.getElementById('total_bank'))
   };
 
   this.bet_chip_combined = function(chip_amount) {
@@ -799,8 +930,8 @@ function Player (name,bank) {
       var bet = parseInt(chip_amount);
       if(this.playing==false){
           this.hands.map(function(x){
-          var held = ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_held"))
-          var bust = ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_bust"))
+          var held = ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_dealer_messages"))
+          var bust = ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_player_messages"))
 
           })
           if (this.hands[this.hand_selected].bet + bet < max && bet < this.bank ) {
@@ -850,25 +981,10 @@ function Player (name,bank) {
   }
 
   this.hold_hand = function () {
-
       if(this.playing == true) {
           this.hands[this.hand_selected].held = true;
-          var held = ReactDOM.render(React.createElement (Held,{visible:'show'}),  document.getElementById(game1.player.hands[game1.player.hand_selected].hand_side+"_bust"))
-
-          var hand_count = 0;
-          var held_count = 0;
-          for( var x = 0; x < this.hands.length; x++ ) {
-              if ((this.hands[x].held == true) || (this.hands[x].win == 'bust')){
-                  held_count++;
-              }
-              if (this.hands[x].cards.length>1) {
-                  hand_count++;
-              }
-          }
-          if(held_count == hand_count) {
-              this.playing == false
-              game1.show_dealers_cards(true,500);
-          }
+          var held = ReactDOM.render(React.createElement (Held,{visible:'show'}),  document.getElementById(game1.player.hands[game1.player.hand_selected].hand_side+"_player_messages"))
+          game1.check_hold_count();
       }
   };
 
@@ -892,75 +1008,15 @@ function Player (name,bank) {
                     //check if the new card busted the hand
                       if ( this.hands[this.hand_selected].check_bust() ) {
                           this.hands[this.hand_selected].win = 'bust';
-                          //var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.hands[this.hand_selected].hand_side+"_bust"))
-
                         //check if all of the player's hands are busted including possible split hands
-                          for( var x = 0; x < this.hands.length; x++ ) {
-                              if( this.hands[x].cards.length > 1 ) {
-                                  hand_count ++;
-                              }
-                              if (( this.hands[x].win == 'bust') || ( this.hands[x].held == true)){
-                                  bust_count ++;
-                                  console.log("bust"+bust_count);
-                              }
-                          }
-                        //if all hands are busted, end the round by checking winner and calculating scores
-                          if (hand_count == bust_count) {
-                              game1.check_winner();
-                          }
+                        game1.check_hold_count(this.hands[this.hand_selected]);
                       }
                         game1.player.hands[this.hand_selected].check_double_down();
-
                   }
               }
           }else {
-              for(var x=0;x<this.hands.length;x++) {
-                  for(var y=0;y<this.hands[x].cards.length;y++){
-                      var newcard = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[x].hand_side+"_card"+(y+1)));
-                  }
-                  this.hands[x].cards.length=0;
-                  this.hands[x].held = false;
-                  this.hands[x].win=false;
-                  this.hands[x].hand_value = 0;
-                  this.hands[x].cards_shown = 1;
-                  var held = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[x].hand_side+"_held"))
-                  var bust = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[x].hand_side+"_bust"))
-              }
-              for(var a=0; a < game1.dealer.hands[0].cards.length; a++) {
-                  var newcard = ReactDOM.unmountComponentAtNode(document.getElementById("dealer_card"+(a+1)));
-              }
-              game1.dealer.hands[0].cards.length = 0;
-              game1.dealer.hands[0].hand_value = 0;
-              game1.dealer.hands[0].cards_shown = 1;
-              var bet = ReactDOM.unmountComponentAtNode(document.getElementById("left_bet"))
-              bet = ReactDOM.unmountComponentAtNode(document.getElementById("right_bet"))
-              var dealer_score = ReactDOM.unmountComponentAtNode(document.getElementById('dealer_score'))
-              var left_score = ReactDOM.unmountComponentAtNode(document.getElementById('left_score'))
-              var mid_score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
-              var right_score = ReactDOM.unmountComponentAtNode(document.getElementById('right_score'))
-              game1.deck.dealCards(2,0,'dealer');//(numberofCards,hand,dealer/player) hand 0=mid 1=left 2=right
-              game1.deck.dealCards(2,0,'player');
-              game1.dealer.hands[0].show_card(true);//true = dealers first cards, hide first card and show second only need to call once
-              game1.player.hands[0].show_card();//call to show the next card that has not been shown
-              game1.player.hands[0].show_card();
-              game1.player.hands[0].update_score();
-              game1.player.hands[0].check_split(game1.player.hands[0].cards.length);
-              if(this.hands[0].hand_value == 22) {
-                  this.hands[0].cards[0].cardValue = 1;
-                  this.hands[0].hand_value -= 10;
-                  var score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
-                  score = ReactDOM.render(React.createElement (Hand_Score,{score:this.hands[0].hand_value}),  document.getElementById('mid_score'))
-              }
-              game1.player.playing=true;
-              game1.first_turn = true;
-              if (game1.dealer.hands[0].check_blackjack() == true) {
-                  game1.check_winner();
-              }else if (game1.player.hands[0].check_blackjack() == true) {
-                  game1.check_winner();
-              }else {
-                  game1.first_turn = false;
-                  game1.player.hands[0].check_double_down();
-              }
+                game1.unmount_cards();
+                game1.deal_first_hand();
           }
       }
   };
@@ -991,6 +1047,12 @@ function Player (name,bank) {
                 var left_arrow = ReactDOM.unmountComponentAtNode(document.getElementById('left_top'))
                 right_arrow = ReactDOM.render(React.createElement (Arrow,{visible:'visible',side:'right'}),  document.getElementById('right_top'))
                 break;
+            default:
+                this.hand_selected = 0;
+                ReactDOM.unmountComponentAtNode(document.getElementById('mid_top'))
+                ReactDOM.unmountComponentAtNode(document.getElementById('right_top'))
+                ReactDOM.unmountComponentAtNode(document.getElementById('left_top'))
+                break;
         }
         this.hands[this.hand_selected].check_double_down();
     }
@@ -1012,21 +1074,21 @@ function Player (name,bank) {
                     if(this.hands[0].hand_value == 22) {
                         this.hands[0].cards[0].cardValue = 1;
                         this.hands[0].hand_value -= 10;
-                        var score = ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
-                        score = ReactDOM.render(React.createElement (Hand_Score,{score:this.hands[0].hand_value}),  document.getElementById('mid_score'))
+                        ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
+                        ReactDOM.render(React.createElement (Hand_Score,{score:this.hands[0].hand_value}),  document.getElementById('mid_score'))
                     }
                     if(this.hands[1].hand_value == 22) {
                         this.hands[1].cards[0].cardValue = 1;
                         this.hands[1].hand_value -= 10;
-                        var score = ReactDOM.unmountComponentAtNode(document.getElementById('left_score'))
-                        score = ReactDOM.render(React.createElement (Hand_Score,{score:this.hands[1].hand_value}),  document.getElementById('left_score'))
+                        ReactDOM.unmountComponentAtNode(document.getElementById('left_score'))
+                        ReactDOM.render(React.createElement (Hand_Score,{score:this.hands[1].hand_value}),  document.getElementById('left_score'))
                     }
                     this.hands[1].bet = this.hands[0].bet;
                     game1.player.total_bet += this.hands[1].bet;
                     game1.player.bank -= this.hands[1].bet
-                    var bet = ReactDOM.unmountComponentAtNode(document.getElementById('left_bet'))
+                    ReactDOM.unmountComponentAtNode(document.getElementById('left_bet'))
 
-                    bet = ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.hands[1].bet}),  document.getElementById('left_bet'));
+                    ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.hands[1].bet}),  document.getElementById('left_bet'));
 
                     this.hands[1].chip_count =0;
                     for (var z=0;z<this.hands[0].chips.length;z++) {
@@ -1227,7 +1289,6 @@ function Hand (side) {
     this.chips = []
     this.combined_chips = []
     this.held = false;
-
     this.show_card = function (first_turn) {
 
         if (first_turn) {
@@ -1260,6 +1321,7 @@ function Hand (side) {
           return true;
         }
     };
+
     this.check_split = function (number_of_cards) {
         if ((this.cards[0].face == this.cards[1].face) && (number_of_cards === 2 )) {
           console.log("number"+number_of_cards);
@@ -1295,7 +1357,7 @@ function Hand (side) {
         })
 
         console.log(game1.player.hands[game1.player.hand_selected].combined_chips);
-        game1.unmount_chips();
+        game1.unmount_chips([game1.player.hand_selected]);
         console.log(game1.player.hands[game1.player.hand_selected].combined_chips);
 
         game1.player.hands[game1.player.hand_selected].combined_chips.map(function(x){
@@ -1337,10 +1399,10 @@ function Hand (side) {
         }
         if(this.hand_value > 21) {
           if(this.hand_side === 'dealer'){
-            var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById("mid_held"))
+            var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById("mid_dealer_messages"))
 
           }else {
-            var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.hand_side+"_bust"))
+            var bust = ReactDOM.render(React.createElement (Busted,{visible:'show'}),  document.getElementById(this.hand_side+"_player_messages"))
 
           }
            return true;
@@ -1363,7 +1425,7 @@ function Deck () {
 			this.cards = [];
       this.makeNewDeck = function (numberOfDecks) {
 					var suits = ['Clubs','Diamonds','Hearts','Spades'];
-					var faces = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+					var faces = ['2','2','2','2','2','2','2','2','2','2','2','2','2'];
 					var cardValue = [11,2,3,4,5,6,7,8,9,10,10,10,10];
 					for( var i = 0; i < numberOfDecks; i++ ) {
 							var cardnumber = 0;

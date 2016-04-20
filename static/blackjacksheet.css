@@ -125,8 +125,7 @@ body {
 	height: 100vh;
 	width:100%;
 	-webkit-flex-direction: column;
-	min-width: 1440;
-	min-height: 840;
+
 }
 
 #container {
@@ -212,15 +211,16 @@ body {
 	position: absolute;
 	height: 4vh;
 	width: 4%;
-	margin-left: 14%;
-	margin-top: 10vh;
+	margin-left: 20%;
+	margin-top: 6vh;
 }
 .left_score {
 	background-image: url("images/score_container.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
 	position: absolute;
-	margin-left:22.8%;
+	margin-left:29%;
+	margin-top: -5%;
 	text-align: center;
 	height: 5vh;
 	width: 5%;
@@ -234,8 +234,8 @@ body {
 
 .left_bet span {
 	position: absolute;
-	margin-left: 25%;
-	margin-top: -10vh;
+	margin-left: 29.5%;
+	margin-top: -24vh;
 }
 .left_cards {
 	-webkit-flex: 1.5;
@@ -244,40 +244,41 @@ body {
 
 .left_cards img {
 	position: absolute;
+	margin-top: -9vh;
 	height: 15vh;
 	width:6%;
 }
 
 .left_card1{
-	margin-left: 15%;
+	margin-left: 20%;
 	z-index: 8;
 }
 .left_card2{
-	margin-left: 14%;
+	margin-left: 19%;
 	z-index: 7;
 }
 .left_card3{
-	margin-left: 13%;
+	margin-left: 18%;
 	z-index: 6;
 }
 .left_card4{
-	margin-left: 12%;
+	margin-left: 17%;
 	z-index: 5;
 }
 .left_card5{
-	margin-left: 11%;
+	margin-left: 16%;
 	z-index: 4;
 }
 .left_card6{
-	margin-left: 10%;
+	margin-left: 15%;
 	z-index: 3;
 }
 .left_card7{
-	margin-left: 9%;
+	margin-left: 14%;
 	z-index: 	2;
 }
 .left_card8{
-	margin-left: 8%;
+	margin-left: 13%;
 	z-index: 1;
 }
 
@@ -301,37 +302,37 @@ body {
 }
 
 .left_chip1 {
-	margin-left: 11%;
-	margin-top: -6vh;
+	margin-left: 16%;
+	margin-top: -20vh;
 }
 .left_chip2 {
-	margin-left: 11%;
-	margin-top: -6.5vh;
+	margin-left: 16%;
+	margin-top: -20.5vh;
 }
 .left_chip3 {
-	margin-left: 11%;
-	margin-top: -7vh;
+	margin-left: 16%;
+	margin-top: -21vh;
 }
 .left_chip4 {
-	margin-left: 11%;
-	margin-top: -7.5vh;
+	margin-left: 16%;
+	margin-top: -21.5vh;
 }
 .left_chip5 {
-	margin-left: 11%;
-	margin-top: -8vh;
+	margin-left: 16%;
+	margin-top: -22vh;
 }
 
 .left_chip6 {
-	margin-left: 11%;
-	margin-top: -8.5vh;
+	margin-left: 16%;
+	margin-top: -22.5vh;
 }
 .left_chip7 {
-	margin-left: 11%;
-	margin-top: -9vh;
+	margin-left: 16%;
+	margin-top: -23vh;
 }
 .left_chip8 {
-	margin-left: 11%;
-	margin-top: -9.5vh;
+	margin-left: 16%;
+	margin-top: -23.5vh;
 }
 
 .left_chip9 {
@@ -544,12 +545,11 @@ body {
 	z-index: 0;
 }
 
-
 .left_bust{
 
 	position: absolute;
-	margin-left:10%;
-	margin-top: 5vh;
+	margin-left:16%;
+	margin-top: -4vh;
 	z-index: 100;
 }
 .mid_bust{
@@ -573,10 +573,40 @@ display: -webkit-flex;
 	width:5%;
 	height: 4vh;
 }
+.left_money {
+display: -webkit-flex;
+	position: absolute;
+	margin-top: 28vh;
+	margin-left: 12%;
+	height: 5vh;
+	width:10%;
+	z-index: 37;
+}
+
+.left_money img {
+	-webkit-flex: 1;
+	width:5%;
+	height: 4vh;
+}
+.right_money {
+display: -webkit-flex;
+	position: absolute;
+	margin-top: 28vh;
+	margin-left: 12%;
+	height: 5vh;
+	width:10%;
+	z-index: 37;
+}
+
+.right_money img {
+	-webkit-flex: 1;
+	width:5%;
+	height: 4vh;
+}
 .busted {
-margin-left:20%;
+margin-left:57%;
 width: 70%;
-height: 9vh;
+height: 7vh;
 }
 
 .held {
@@ -616,7 +646,7 @@ height: 9vh;
 .mid_held{
 	position: absolute;
 	margin-left:0%;
-	margin-top: -25vh;
+	margin-top: -16vh;
 	z-index: 50;
 }
 
@@ -624,7 +654,7 @@ height: 9vh;
 
 	position: absolute;
 	margin-left:10%;
-	margin-top: 5vh;
+	margin-top: -25vh;
 	z-index: 100;
 }
 .right_held{
@@ -642,14 +672,14 @@ height: 9vh;
 	position: absolute;
 	height: 4vh;
 	width: 4%;
-	margin-left: 14%;
+	margin-left: 15%;
 }
 .mid_score {
 	background-image: url("images/score_container.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
 	position: absolute;
-	margin-left:22%;
+	margin-left:25%;
 	text-align: center;
 	height: 5vh;
 	width: 5%;
@@ -673,6 +703,7 @@ height: 9vh;
 
 .mid_cards img {
 	position: absolute;
+	margin-top: -1vh;
 	height: 15vh;
 	width:6%;
 }
@@ -1002,15 +1033,16 @@ height: 9vh;
 	position: absolute;
 	height: 4vh;
 	width: 4%;
-	margin-left: 14%;
-	margin-top: 10vh;
+	margin-left: 9.5%;
+	margin-top: 6vh;
 }
 .right_score {
 	background-image: url("images/score_container.png");
 	background-repeat:no-repeat;
 	background-size:100% 100%;
 	position: absolute;
-	margin-left:22.8%;
+	margin-left:18.5%;
+	margin-top:-2%;
 	text-align: center;
 	height: 5vh;
 	width: 5%;
@@ -1024,8 +1056,8 @@ height: 9vh;
 
 .right_bet span {
 	position: absolute;
-	margin-left: 23%;
-	margin-top: -20vh;
+	margin-left: 18%;
+	margin-top: -24vh;
 }
 .right_cards {
 	-webkit-flex: 1.5;
@@ -1035,40 +1067,41 @@ height: 9vh;
 .right_cards img {
 	position: absolute;
 	height: 15vh;
+	margin-top: -4vh;
 	width:6%;
 }
 
 .right_card1{
-	margin-left: 14.5%;
-	z-index: 8;
+	margin-left: 8%;
+	z-index: 1;
 }
 .right_card2{
-	margin-left: 13.5%;
-	z-index: 7;
+	margin-left: 9%;
+	z-index: 2;
 }
 .right_card3{
-	margin-left: 12.5%;
-	z-index: 6;
-}
-.right_card4{
-	margin-left: 11.5%;
-	z-index: 5;
-}
-.right_card5{
-	margin-left: 10.5%;
-	z-index: 4;
-}
-.right_card6{
-	margin-left: 9.5%;
+	margin-left: 10%;
 	z-index: 3;
 }
+.right_card4{
+	margin-left: 11%;
+	z-index: 4;
+}
+.right_card5{
+	margin-left: 12%;
+	z-index: 5;
+}
+.right_card6{
+	margin-left: 13%;
+	z-index: 6;
+}
 .right_card7{
-	margin-left: 8.5%;
-	z-index: 	2;
+	margin-left: 14%;
+	z-index: 	7;
 }
 .right_card8{
-	margin-left: 7.5%;
-	z-index: 1;
+	margin-left: 15%;
+	z-index: 8;
 }
 
 .right_bottom {
@@ -1091,63 +1124,63 @@ height: 9vh;
 }
 
 .right_chip1 {
-	margin-left: 11%;
-	margin-top: -17vh;
+	margin-left: 5%;
+	margin-top: -20vh;
 }
 .right_chip2 {
-	margin-left: 11%;
-	margin-top: -17.5vh;
+	margin-left: 5%;
+	margin-top: -20.5vh;
 }
 .right_chip3 {
-	margin-left: 11%;
-	margin-top: -18vh;
+	margin-left: 5%;
+	margin-top: -21vh;
 }
 .right_chip4 {
-	margin-left: 11%;
-	margin-top: -18.5vh;
+	margin-left: 5%;
+	margin-top: -21.5vh;
 }
 .right_chip5 {
-	margin-left: 11%;
-	margin-top: -19vh;
+	margin-left: 5%;
+	margin-top: -22vh;
 }
 
 .right_chip6 {
-	margin-left: 11%;
-	margin-top: -19.5vh;
+	margin-left: 5%;
+	margin-top: -22.5vh;
 }
 .right_chip7 {
-	margin-left: 11%;
-	margin-top: -20vh;
+	margin-left: 5%;
+	margin-top: -23vh;
 }
 .right_chip8 {
-	margin-left: 11%;
-	margin-top: -20.5vh;
+	margin-left: 5%;
+	margin-top: -23.5vh;
 }
 
 .right_chip9 {
 	margin-left: 7%;
-	margin-top: -17vh;
+	margin-top: -24vh;
 }
 .right_chip10 {
 	margin-left: 7%;
-	margin-top: -17.5vh;
+	margin-top: -24.5vh;
 }
 
 .right_chip11 {
 	margin-left: 7%;
-	margin-top: -18vh;
+	margin-top: -25vh;
 }
 .right_chip12 {
 	margin-left: 7%;
-	margin-top: -18.5vh;
+	margin-top: -25.5vh;
 }
 .right_chip13 {
 	margin-left: 7%;
-	margin-top: -19vh;
+	margin-top: -26vh;
 }
 .right_chip14 {
 	margin-left: 7%;
-	margin-top: -19.5vh;
+	margin-top: -26.5vh;
 }
 .right_chip15 {
 	margin-left: 7%;
@@ -1185,7 +1218,7 @@ height: 9vh;
 .logo{
 	-webkit-flex: 0 17vh;
 	width: 55vh;
-	margin-left: 34%;
+	margin-left: 36%;
 }
 
 
@@ -1517,4 +1550,42 @@ transform-origin: 50% 50% 0;
 	left: 0;
 	font-size: 70pt;
 	font-weight: bold;
+}
+
+#blackback {
+		position: absolute;
+		background-color: black;
+		background-size: 100% 100%;
+		height: 100vh;
+		width: 100%;
+		z-index: 11;
+}
+#loadingtext {
+		position: absolute;
+		left: 47.8%;
+		top: 49.5vh;
+		z-index: 13;
+		font-size: 10pt;
+		color: white;
+}
+
+#preloader{
+    position:absolute;
+		left: 47%;
+		top: 45vh;
+    width:85px;
+    height:85px;
+    background-image: url("images/chips/loadingchip.png");
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+
+    animation: preloader 1.5s infinite linear;
+		z-index: 12;
+}
+
+
+@keyframes preloader {
+    0% {transform: rotate(0deg);}
+    50% {transform: rotate(180deg);}
+    100% {transform: rotate(360deg);}
 }
