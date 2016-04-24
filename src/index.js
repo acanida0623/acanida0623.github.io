@@ -51,13 +51,10 @@ window.onload = function() {
     document.getElementById("loadingtext").style.display = "none";
     document.getElementById("preloader").style.display = "none";
     document.getElementById("blackback").style.display = "none";
+    new FastClick(document.body);
 };
 
-if ('addEventListener' in document) {
-    document.addEventListener('DOMContentLoaded', function() {
-        FastClick.attach(document.body);
-    }, false);
-}
+
 
 
 
