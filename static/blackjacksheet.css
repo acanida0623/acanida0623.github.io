@@ -1,3 +1,44 @@
+#blackback {
+		position: absolute;
+		background-color: black;
+		background-size: 100% 100%;
+		height: 100vh;
+		width: 100%;
+		z-index: 11;
+}
+#loadingtext {
+		position: absolute;
+		left: 47.8%;
+		top: 49.5vh;
+		z-index: 13;
+		font-size: 10pt;
+		color: white;
+}
+
+#preloader{
+    position:absolute;
+		left: 47%;
+		top: 45vh;
+    width:85px;
+    height:85px;
+    background-image: url("images/chips/loadingchip.png");
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+    animation: preloader infinite linear;
+		z-index: 12;
+}
+
+
+@keyframes preloader {
+    0% {transform: rotate(0deg);}
+    50% {transform: rotate(180deg);}
+    100% {transform: rotate(360deg);}
+}
+
+.test_card{
+
+}
+
 .mc1animate-leave {
 	opacity:1;
 }
@@ -5,6 +46,76 @@
 .mc1animate-leave.mc1animate-leave-active {
 	opacity: 0.1;
   transition: all 5000ms ease-in;
+}
+
+.dealer_card_in {
+	margin-left: 15%; margin-top:-6vh;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: 1.5s;
+	animation-timing-function: ease-in;
+}
+
+@-webkit-keyframes dealer_card_animation {
+    0%   {margin-left: 55%; -webkit-transform: rotate(-17deg); background-image: url("images/cards/53.png"); }
+		5%   {margin-left: 53%; -webkit-transform: rotate(-17deg); background-image: url("images/cards/53.png");}
+		10%   {margin-left: 51%; -webkit-transform: rotate(-17deg);background-image: url("images/cards/53.png");}
+		15%   {margin-left: 49%; -webkit-transform: rotate(-17deg);background-image: url("images/cards/53.png");}
+		20%   {margin-left: 47%; -webkit-transform: rotate(-17deg);background-image: url("images/cards/53.png");}
+    25%  {margin-left: 45%; -webkit-transform: rotate(-17deg);background-image: url("images/cards/53.png");}
+		30%   {margin-left: 41%; }
+		35%   {margin-left: 39%; }
+		40%   {margin-left: 37%; }
+		45%   {margin-left: 35%; }
+    50%  {margin-left: 33%; }
+		55%   {margin-left: 31%; }
+		60%   {margin-left: 29%; }
+		65%   {margin-left: 27%; }
+		70%   {margin-left: 25%; }
+    75%  {margin-left: 23%; }
+		80%   {margin-left: 21%; }
+		85%   {margin-left: 19%; }
+		90%   {margin-left: 17%; }
+		95%   {margin-left: 16%; }
+    100% {margin-left: 15%; }
+}
+
+
+@-webkit-keyframes mid_card_animation {
+	0%   {margin-left: 55%; -webkit-transform: rotate(-17deg); margin-top:-40vh;  }
+  5%   {margin-left:53%; -webkit-transform: rotate(-17deg); margin-top: -38vh; }
+	10%   {margin-left:51%; -webkit-transform: rotate(-17deg);margin-top: -36vh; }
+	15%   {margin-left: 49%; -webkit-transform: rotate(-17deg);margin-top: -34vh;}
+	20%   {margin-left: 47%; -webkit-transform: rotate(-17deg);margin-top: -32vh; }
+	25%  {margin-left: 45%; -webkit-transform: rotate(-17deg);margin-top: -30vh;}
+	30%   {margin-left: 41%; margin-top: -28vh;-webkit-transform: rotate(-17deg); }
+	35%   {margin-left: 39%; margin-top: -26vh; -webkit-transform: rotate(-17deg);}
+	40%   {margin-left: 37%; margin-top: -24vh;-webkit-transform: rotate(-17deg); }
+	45%   {margin-left: 35%; margin-top: -22vh; -webkit-transform: rotate(-17deg);}
+	50%  {margin-left: 33%; margin-top: -20vh; -webkit-transform: rotate(-17deg);}
+	55%   {margin-left: 31%; margin-top: -18vh; }
+	60%   {margin-left: 29%; margin-top: -16vh; }
+	65%   {margin-left: 27%; margin-top: -14vh; }
+	70%   {margin-left: 25%; margin-top: -12vh; }
+	75%  {margin-left: 23%; margin-top: -10vh; }
+	80%   {margin-left: 21%; margin-top: -7.8vh; }
+	85%   {margin-left: 19%; margin-top: -5.8vh; }
+	90%   {margin-left: 17%; margin-top: -3.8vh; }
+	95%   {margin-left: 16%; margin-top: -1.8vh; }
+	100% {margin-left: 15%; margin-top: -1vh; }
+}
+
+@-webkit-keyframes left_card_animation {
+	0%   {margin-left: 90%; -webkit-transform: rotate(-17deg); margin-top:-40vh;  }
+	10%   {margin-left:82.5; -webkit-transform: rotate(-16deg);margin-top: -38.5vh; }
+	20%   {margin-left: 75%; -webkit-transform: rotate(-15deg);margin-top: -37vh; }
+	30%   {margin-left: 67.5%; margin-top: -33.5vh;-webkit-transform: rotate(-14deg); }
+	40%   {margin-left: 60%; margin-top: -30vh;-webkit-transform: rotate(-13deg); }
+	50%  {margin-left: 52.5%; margin-top: -26.5vh; -webkit-transform: rotate(-12deg);}
+	60%   {margin-left: 45%; margin-top: -23vh; }
+	70%   {margin-left: 37.5%; margin-top: -19.5vh; }
+	80%   {margin-left: 30%; margin-top: -16vh; }
+	90%   {margin-left: 22.5%; margin-top: -12.5vh; }
+	100% {margin-left: 20%; margin-top: -9vh; }
 }
 
 @-webkit-keyframes chip_in {
@@ -251,34 +362,148 @@ body {
 
 .left_card1{
 	margin-left: 20%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
 	z-index: 8;
 }
 .left_card2{
-	margin-left: 19%;
+	margin-left: 18.8%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
 	z-index: 7;
 }
 .left_card3{
-	margin-left: 18%;
+	margin-left: 17.6%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
 	z-index: 6;
 }
 .left_card4{
-	margin-left: 17%;
+	margin-left: 16.4%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
 	z-index: 5;
 }
 .left_card5{
-	margin-left: 16%;
+	margin-left: 15.2%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
 	z-index: 4;
 }
 .left_card6{
-	margin-left: 15%;
+	margin-left: 14.0%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
 	z-index: 3;
 }
 .left_card7{
-	margin-left: 14%;
+	margin-left: 12.8%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
 	z-index: 	2;
 }
 .left_card8{
-	margin-left: 13%;
+	margin-left: 11.6%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 1;
+}
+.left_card9{
+	margin-left: 10.4%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 8;
+}
+.left_card10{
+	margin-left: 8.2%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 7;
+}
+.left_card11{
+	margin-left: 7.0%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 6;
+}
+.left_card12{
+	margin-left: 5.8%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 5;
+}
+.left_card13{
+	margin-left: 4.6%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 4;
+}
+.left_card14{
+	margin-left: 3.4%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 3;
+}
+.left_card15{
+	margin-left: 2.2%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 	2;
+}
+.left_card16{
+	margin-left: 1.0%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 1;
+}
+.left_card17{
+	margin-left: -1.2%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 5;
+}
+.left_card18{
+	margin-left: -2.4%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 4;
+}
+.left_card19{
+	margin-left: -3.6%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 3;
+}
+.left_card20{
+	margin-left: -4.4%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
+	z-index: 	2;
+}
+.left_card21{
+	margin-left: -5.6%;
+	-webkit-animation-name: left_card_animation;
+	-webkit-animation-duration: .4s;
+
 	z-index: 1;
 }
 
@@ -482,80 +707,104 @@ body {
 
 .dealer_card1{
 	margin-left: 15%;
+
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
+	animation-timing-function: ease-in;
 	z-index: 15;
 }
 .dealer_card2{
-	margin-left: 14%;
+	margin-left: 13.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
+	animation-timing-function: ease-in;
 	z-index: 14;
 }
 .dealer_card3{
-	margin-left: 13%;
+	margin-left: 12.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
+	animation-timing-function: ease-in;
 	z-index: 13;
 }
 .dealer_card4{
-	margin-left: 12%;
+	margin-left: 11.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
+	animation-timing-function: ease-in;
 	z-index: 12;
 }
 .dealer_card5{
-	margin-left: 11%;
+	margin-left: 10.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 11;
 }
 .dealer_card6{
-	margin-left: 10%;
+	margin-left: 9.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 10;
 }
 .dealer_card7{
-	margin-left: 9%;
+	margin-left: 8.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 9;
 }
 .dealer_card8{
-	margin-left: 8%;
+	margin-left: 7.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 8;
 }
 .dealer_card9{
-	margin-left: 7%;
+	margin-left: 6.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 7;
 }
 .dealer_card10{
-	margin-left: 6%;
+	margin-left: 5.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 6;
 }
 .dealer_card11{
-	margin-left: 5%;
+	margin-left: 4.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 5;
 }
 .dealer_card12{
-	margin-left: 4%;
+	margin-left: 3.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 4;
 }
 .dealer_card13{
-	margin-left: 3%;
+	margin-left: 2.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 3;
 }
 .dealer_card14{
-	margin-left: 2%;
+	margin-left: 1.8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 2;
 }
 .dealer_card15{
-	margin-left: 1%;
+	margin-left: .8%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 	1;
 }
 .dealer_card16{
-	margin-left: 0%;
+	margin-left: -.2%;
+	-webkit-animation-name: dealer_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 0;
-}
-
-.left_bust{
-
-	position: absolute;
-	margin-left:16%;
-	margin-top: -4vh;
-	z-index: 100;
-}
-.mid_bust{
-position: absolute;
-margin-top: 18vh;
-z-index: 37;
 }
 
 .mid_money {
@@ -576,8 +825,8 @@ display: -webkit-flex;
 .left_money {
 display: -webkit-flex;
 	position: absolute;
-	margin-top: 28vh;
-	margin-left: 12%;
+	margin-top: 21vh;
+	margin-left: 16%;
 	height: 5vh;
 	width:10%;
 	z-index: 37;
@@ -603,17 +852,149 @@ display: -webkit-flex;
 	width:5%;
 	height: 4vh;
 }
-.busted {
-margin-left:57%;
-width: 70%;
-height: 7vh;
-}
 
-.held {
-	margin-left:52%;
-	width: 70%;
+.mid_bust .busted {
+	position: absolute;
+	z-index: 37;
+	margin-left:8%;
+	margin-top: 18vh;
+	width: 19%;
 	height: 9vh;
 }
+
+.mid_bust .loser {
+	position: absolute;
+	z-index: 37;
+	margin-left:8%;
+	margin-top: 18vh;
+	width: 19%;
+	height: 9vh;
+}
+
+.mid_bust .held {
+	position: absolute;
+	z-index: 37;
+	margin-left:8%;
+	margin-top: 6vh;
+	width: 19%;
+	height: 9vh;
+}
+.mid_bust .draw {
+	position: absolute;
+	z-index: 37;
+	margin-left:8%;
+	margin-top: 18vh;
+	width: 19%;
+	height: 9vh;
+}
+.mid_bust .winner {
+	position: absolute;
+	z-index: 37;
+	margin-left:8%;
+	margin-top: 18vh;
+	width: 19%;
+	height: 9vh;
+}
+.mid_bust .blackjack {
+	position: absolute;
+	z-index: 37;
+	margin-left:5%;
+	margin-top: 17vh;
+	width: 26%;
+	height: 11vh;
+}
+
+.left_bust .busted {
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left: 12.5%;
+	margin-top: 10vh;
+	z-index: 100;
+}
+
+.left_bust .draw {
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left: 12.5%;
+	margin-top: 10vh;
+	z-index: 100;
+}
+
+.left_bust .winner {
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left: 12.5%;
+	margin-top: 10vh;
+	z-index: 100;
+}
+
+.left_bust .loser{
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left: 12.5%;
+	margin-top: 10vh;
+	z-index: 100;
+}
+
+.left_bust .held{
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left:12.5%;
+	margin-top: -2vh;
+	z-index: 100;
+}
+
+
+.right_bust .busted {
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left: 2%;
+    margin-top: 15vh;
+	z-index: 100;
+}
+
+.right_bust .draw {
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left: 2%;
+	    margin-top: 15vh;
+	z-index: 100;
+}
+
+.right_bust .winner {
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left: 2%;
+	    margin-top: 15vh;
+	z-index: 100;
+}
+
+.right_bust .loser{
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left: 2%;
+    margin-top: 15vh;
+	z-index: 100;
+}
+
+.right_bust .held{
+	width: 19%;
+	height: 9vh;
+	position: absolute;
+	margin-left:2%;
+	    margin-top: 15vh;
+	z-index: 100;
+}
+
 
 .blackjack {
 margin-left:12%;
@@ -635,18 +1016,29 @@ margin-left:45%;
 width: 60%;
 height: 9vh;
 }
-.right_bust{
 
+.mid_held .busted{
 	position: absolute;
-	margin-left:10%;
-
-	margin-top: 5vh;
-	z-index: 100;
+	margin-left:8%;
+	margin-top: -20vh;
+	width: 19%;
+	height: 9vh;
+	z-index: 50;
 }
-.mid_held{
+.mid_held .blackjack{
 	position: absolute;
-	margin-left:0%;
-	margin-top: -16vh;
+	margin-left:8%;
+	margin-top: -20vh;
+	width: 21%;
+	height: 11vh;
+	z-index: 50;
+}
+.mid_held .draw{
+	position: absolute;
+	margin-left:8%;
+	margin-top: -20vh;
+	width: 19%;
+	height: 9vh;
 	z-index: 50;
 }
 
@@ -710,34 +1102,128 @@ height: 9vh;
 
 .mid_card1{
 	margin-left: 15%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 8;
 }
 .mid_card2{
-	margin-left: 14%;
+	margin-left: 13.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 7;
 }
 .mid_card3{
-	margin-left: 13%;
+	margin-left: 12.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 6;
 }
 .mid_card4{
-	margin-left: 12%;
+	margin-left: 11.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 5;
 }
 .mid_card5{
-	margin-left: 11%;
+	margin-left: 10.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 4;
 }
 .mid_card6{
-	margin-left: 10%;
+	margin-left: 9.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 3;
 }
 .mid_card7{
-	margin-left: 9%;
+	margin-left: 8.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 	2;
 }
 .mid_card8{
-	margin-left: 8%;
+	margin-left: 7.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 1;
+}
+.mid_card9{
+	margin-left: 6.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 8;
+}
+.mid_card10{
+	margin-left: 5.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 7;
+}
+.mid_card11{
+	margin-left: 4.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 6;
+}
+.mid_card12{
+	margin-left: 3.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 5;
+}
+.mid_card13{
+	margin-left: 12.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 4;
+}
+.mid_card14{
+	margin-left: 1.8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 3;
+}
+.mid_card15{
+	margin-left: .8%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 	2;
+}
+.mid_card16{
+	margin-left: -.2%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 1;
+}
+.mid_card17{
+	margin-left: -1.2%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 1;
+}
+.mid_card18{
+	margin-left: -2.2%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 1;
+}
+.mid_card19{
+	margin-left: -3.2%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 1;
+}
+.mid_card20{
+	margin-left: -4.2%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
+	z-index: 1;
+}
+.mid_card21{
+	margin-left: -5.2%;
+	-webkit-animation-name: mid_card_animation;
+	-webkit-animation-duration: .3s;
 	z-index: 1;
 }
 
@@ -1533,59 +2019,42 @@ transform-origin: 50% 50% 0;
 
 }
 
-
-.red {
-	color: red;
-}
-
-
-#cover{
-	text-align: center;
-	background-color: black;
-	color: red;
-	width: 100vw;
-	height: 100vh;
-	position: absolute;
+#dialogoverlay{
+	visibility: hidden;
+	opacity: .8;
+	position: absolute;;
 	top: 0;
 	left: 0;
-	font-size: 70pt;
-	font-weight: bold;
+	background: #000000;
+	width: 100%;
+	height: 100vh;
+	z-index: 20;
+}
+#dialogbox{
+	background:#FFF;
+	visibility: hidden;
+	position: absolute;;
+	background: #1f628d;
+	left: 37%;
+	top: 25vh;
+	width:26%;
+	height: 22vh;
+	z-index: 20;
 }
 
-#blackback {
-		position: absolute;
-		background-color: black;
-		background-size: 100% 100%;
-		height: 100vh;
-		width: 100%;
-		z-index: 11;
-}
-#loadingtext {
-		position: absolute;
-		left: 47.8%;
-		top: 49.5vh;
-		z-index: 13;
-		font-size: 10pt;
-		color: white;
-}
+#dialogboxhead{ background: #3498db; font-size:2vw; padding:10px; color:#ffffff; text-align:center;height:3vh;width:95;}
+#dialogboxbody{ background:#1f628d; font-size:1vw;padding:5vh; color:#ffffff; height: 2vh; text-align:center;width:95;}
+#dialogboxfoot{ background: #3498db; padding:5px; text-align:center; width:95; height: 4vh;}
 
-#preloader{
-    position:absolute;
-		left: 47%;
-		top: 45vh;
-    width:85px;
-    height:85px;
-    background-image: url("images/chips/loadingchip.png");
-		background-size: 100% 100%;
-		background-repeat: no-repeat;
-
-    animation: preloader 1.5s infinite linear;
-		z-index: 12;
-}
-
-
-@keyframes preloader {
-    0% {transform: rotate(0deg);}
-    50% {transform: rotate(180deg);}
-    100% {transform: rotate(360deg);}
+#close_alert {
+	-webkit-border-radius: 24;
+   -moz-border-radius: 24;
+   border-radius: 24px;
+   font-family: Arial;
+   color: #ffffff;
+   font-size: 70%;
+   background: #3498db;
+	 border: solid #1f628d 2%;
+   padding: .7vh 3% .7vh 3%;
+   text-decoration: none;
 }
