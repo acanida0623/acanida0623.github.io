@@ -184,19 +184,28 @@ var Hit_Button = React.createClass ({
      getInitialState: function() {
      return {
          hover: false,
-         down: this.props.down
+         down: this.props.down,
+         active : this.props.active
      };
  },
  onMouseDownHandler: function() {
-     this.setState({
-         down: true
-     });
-     if (game1.player.hands[0].bet > 0){
-          game1.player.hit_card();
-     }else {
-          Alert.render('You need to place a bet before starting the round.','Place A Bet!')
-     }
+     if (this.state.active){
+         this.setState({
+             down: true,
+             active: false
 
+         });
+         if (game1.player.hands[0].bet > 0){
+              game1.player.hit_card();
+         }else {
+              Alert.render('You need to place a bet before starting the round.','Place A Bet!')
+              this.setState({
+                  down: false,
+                  active: true
+
+              });
+         }
+     }
  },
  onMouseUpHandler: function() {
      this.setState({
@@ -392,13 +401,13 @@ var Blank = React.createClass ({
     }
 });
 
+var hit = ReactDOM.render(React.createElement (Hit_Button,{active:true,down:false}),  document.getElementById('hit_button'))
 
 function inject_objects() {
 var total_bank = ReactDOM.render(React.createElement (Bank,{bank:'$3000'}),  document.getElementById('total_bank'))
 var total_bet = ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$0'}),  document.getElementById('total_bet'))
 var total_win = ReactDOM.render(React.createElement (Win,{win_amount:'$0'}),  document.getElementById('total_win'))
 var stand_button= ReactDOM.render(React.createElement (Stand_Button),  document.getElementById('stand_button'))
-var hit_button= ReactDOM.render(React.createElement (Hit_Button,{down:false}),  document.getElementById('hit_button'))
 var split_button=ReactDOM.render(React.createElement (Split_Button,{inactive:true}), document.getElementById('split_button'))
 var double_button=ReactDOM.render(React.createElement (Double_Button,{inactive:true}), document.getElementById('double_button'))
 
@@ -439,8 +448,8 @@ function Game () {
     var time = time;
       console.log("showing dealers cards");
       if(initial){
-          this.dealer.hands[0].show_card();
-          this.dealer.hands[0].show_card();
+        ReactDOM.unmountComponentAtNode(document.getElementById('dealer_card1'))
+        ReactDOM.render(React.createElement (Card,{visible:'show',cardNumber:this.dealer.hands[0].cards[0].cardNumber,side:'dealer',handPosition:1}),  document.getElementById('dealer_card1'))
           this.dealer.hands[0].update_score();
           if(this.dealer.hands[0].hand_value === 22) {
               this.dealer.hands[0].cards[0].cardValue = 1;
@@ -475,10 +484,7 @@ function Game () {
               console.log(this.dealer.hands[0].hand_value);
               this.round_completed();
           }else if(this.dealer.hands[0].hand_value > 21) {
-
                   this.round_completed()
-
-
           }else {
             setTimeout(function(){
               game1.show_dealers_cards(false,time+475)
@@ -565,12 +571,10 @@ function Game () {
           }
     }
     this.calculate_win()
-
   };
   this.calculate_win = function () {
-      var split_button = ReactDOM.unmountComponentAtNode(document.getElementById('split_button'))
-      split_button = ReactDOM.render(React.createElement (Split_Button,{inactive:true}),  document.getElementById('split_button'))
-
+      ReactDOM.unmountComponentAtNode(document.getElementById('split_button'))
+      ReactDOM.render(React.createElement (Split_Button,{inactive:true}),  document.getElementById('split_button'))
       if (this.blackjack) {
           console.log("blackjack=true");
           switch (this.player.hands[0].win) {
@@ -579,10 +583,10 @@ function Game () {
                   this.player.bank += this.player.hands[0].bet + this.player.total_won;
                   var msg = "YOU GOT A BLACKJACK! YOU WON $"+this.player.total_won+"!";
                   console.log(msg);
-                  var total_win = ReactDOM.unmountComponentAtNode(document.getElementById('total_win'))
-                  var bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
-                  total_win = ReactDOM.render(React.createElement (Win,{win_amount:'$'+this.player.total_won}),  document.getElementById('total_win'))
-                  bank = ReactDOM.render(React.createElement (Bank,{bank:"$"+this.player.bank}),  document.getElementById('total_bank'))
+                  ReactDOM.unmountComponentAtNode(document.getElementById('total_win'))
+                  ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
+                  ReactDOM.render(React.createElement (Win,{win_amount:'$'+this.player.total_won}),  document.getElementById('total_win'))
+                  ReactDOM.render(React.createElement (Bank,{bank:"$"+this.player.bank}),  document.getElementById('total_bank'))
                   this.print_win_loss(this.player.hands[0].bet,'mid')
                   this.reset_game(true);
                   break;
@@ -767,42 +771,63 @@ function Game () {
   }
 
   this.deal_first_hand = function () {
-    this.player.select_hand('mid');
-    ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.player.hands[0].bet}),  document.getElementById('mid_bet'))
-    this.deck.dealCards(2,0,'dealer');//(numberofCards,hand,dealer/player) hand 0=mid 1=left 2=right
-    this.deck.dealCards(2,0,'player');
-    this.dealer.hands[0].show_card(true);//true = dealers first cards, hide first card and show second only need to call once
-    this.player.hands[0].show_card();//call to show the next card that has not been shown
-    this.player.hands[0].show_card();
-    this.player.hands[0].update_score();
-    this.player.hands[0].check_split();
-    if(this.player.hands[0].hand_value === 22) {
-        this.player.hands[0].cards[0].cardValue = 1;
-        this.player.hands[0].hand_value -= 10;
-        ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
-        ReactDOM.render(React.createElement (Hand_Score,{score:this.player.hands[0].hand_value}),  document.getElementById('mid_score'))
-    }
-    this.player.playing=true;
-    this.first_turn = true;
-    if (this.dealer.hands[0].check_blackjack() === true) {
-        this.dealer.hands[0].show_card();
-        this.dealer.hands[0].show_card();
-        this.dealer.hands[0].update_score();
-        this.round_completed();
-    }else if (this.player.hands[0].check_blackjack() === true) {
-        this.dealer.hands[0].show_card();
-        this.dealer.hands[0].show_card();
-        this.dealer.hands[0].update_score();
-        this.round_completed();
-    }else {
-        this.first_turn = false;
-        this.player.hands[0].check_double_down();
-    }
+      this.player.select_hand('mid');
+      ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.player.hands[0].bet}),  document.getElementById('mid_bet'))
+      this.deck.dealCards(2,0,'dealer');//(numberofCards,hand,dealer/player) hand 0=mid 1=left 2=right
+      this.deck.dealCards(2,0,'player');
+      this.show_first_hand(0);
+      setTimeout(function(){
+          game1.player.hands[0].update_score();
+          game1.player.hands[0].check_split();
+          if(game1.player.hands[0].hand_value === 22) {
+              game1.player.hands[0].cards[0].cardValue = 1;
+              game1.player.hands[0].hand_value -= 10;
+              ReactDOM.unmountComponentAtNode(document.getElementById('mid_score'))
+              ReactDOM.render(React.createElement (Hand_Score,{score:game1.player.hands[0].hand_value}),  document.getElementById('mid_score'))
+          }
+          game1.player.playing=true;
+          game1.first_turn = true;
+          switch(true) {
+            case (game1.dealer.hands[0].check_blackjack()):
+                ReactDOM.unmountComponentAtNode(document.getElementById('dealer_card1'))
+                ReactDOM.render(React.createElement (Card,{visible:'show',cardNumber:game1.dealer.hands[0].cards[0].cardNumber,side:'dealer',handPosition:1}),  document.getElementById('dealer_card1'))
+                game1.dealer.hands[0].update_score();
+                game1.round_completed();
+                break;
+            case (game1.player.hands[0].check_blackjack()):
+                ReactDOM.unmountComponentAtNode(document.getElementById('dealer_card1'))
+                ReactDOM.render(React.createElement (Card,{visible:'show',cardNumber:game1.dealer.hands[0].cards[0].cardNumber,side:'dealer',handPosition:1}),  document.getElementById('dealer_card1'))
+                game1.dealer.hands[0].update_score();
+                game1.round_completed();
+                break;
+            default:
+                game1.first_turn = false;
+                game1.player.hands[0].check_double_down();
+          }
+          game1.activate_hit_button();
+      },2100)
+  }
+
+  this.show_first_hand = function(delay) {
+      setTimeout(function(){
+          game1.player.hands[0].show_card();
+      },delay)
+      delay += 700
+      setTimeout(function(){
+          game1.dealer.hands[0].show_card(true);
+      },delay)
+      delay += 700
+      setTimeout(function(){
+          game1.player.hands[0].show_card();
+      },delay)
+      delay += 700
+      setTimeout(function(){
+          game1.dealer.hands[0].show_card();
+      },delay)
   }
 
   this.check_hold_count = function () {
-      var hand_count = 0;
-
+        var hand_count = 0;
         var held_count = this.player.hands.map(function(x){
         var length = x.cards.length
         if(length !== 0) {
@@ -824,6 +849,11 @@ function Game () {
 
   }
 
+  this.activate_hit_button = function () {
+      ReactDOM.unmountComponentAtNode(document.getElementById('hit_button'))
+      hit = ReactDOM.render(React.createElement (Hit_Button,{active:true,down:false}),  document.getElementById('hit_button'))
+  }
+
   this.reset_game = function(win) {
       this.player.total_won = 0;
       this.player.playing = false;
@@ -831,7 +861,7 @@ function Game () {
       this.first_turn = true;
       this.player.split_count = 0;
       this.player.total_bet = 0;
-
+      this.activate_hit_button();
       this.player.hands[0].check_double_down();
       for(var x=0;x<this.player.hands.length;x++) {
           game1.player.hands[x].bet = 0;
@@ -877,25 +907,27 @@ function Player (name,bank) {
         var bet = parseInt(chip_amount);
         if(this.playing===false){
             this.hands.map(function(x){
-            var held = ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_dealer_messages"))
-            var bust = ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_player_messages"))
+            ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_dealer_messages"))
+            ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_player_messages"))
+            ReactDOM.unmountComponentAtNode(document.getElementById(x.hand_side+"_money"))
+
             })
             if (this.hands[this.hand_selected].bet + bet <= max && bet <= this.bank ) {
                 this.hands[this.hand_selected].bet += bet;
                 this.total_bet +=bet;
                 this.bank -= bet;
-                var total_bet = ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'))
-                var total_bank = ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
-                total_bet = ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$'+this.total_bet}),  document.getElementById('total_bet'))
-                total_bank = ReactDOM.render(React.createElement (Bank,{bank:"$"+this.bank}),  document.getElementById('total_bank'))
+                ReactDOM.unmountComponentAtNode(document.getElementById('total_bet'))
+                ReactDOM.unmountComponentAtNode(document.getElementById('total_bank'))
+                ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$'+this.total_bet}),  document.getElementById('total_bet'))
+                ReactDOM.render(React.createElement (Bank,{bank:"$"+this.bank}),  document.getElementById('total_bank'))
                 this.hands[this.hand_selected].chips.push(new Chip(bet))
                 var empty_chip_slot = this.hands[this.hand_selected].hand_side+"_chip"+(this.hands[this.hand_selected].chip_count+1);
                 var current_position = (this.hands[this.hand_selected].chip_count+1);
-                var empty_chip_slots = ReactDOM.unmountComponentAtNode(document.getElementById(empty_chip_slot))
-                empty_chip_slot = ReactDOM.render(React.createElement (Chip_Hand,{chipNumber:chip_amount,side:this.hands[this.hand_selected].hand_side,position:current_position}),  document.getElementById(empty_chip_slot))
+                ReactDOM.unmountComponentAtNode(document.getElementById(empty_chip_slot))
+                ReactDOM.render(React.createElement (Chip_Hand,{chipNumber:chip_amount,side:this.hands[this.hand_selected].hand_side,position:current_position}),  document.getElementById(empty_chip_slot))
                 this.hands[this.hand_selected].chip_count++;
-                var mid_bet = ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[this.hand_selected].hand_side+'_bet'))
-                mid_bet = ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.hands[this.hand_selected].bet}),  document.getElementById(this.hands[this.hand_selected].hand_side+'_bet'))
+                ReactDOM.unmountComponentAtNode(document.getElementById(this.hands[this.hand_selected].hand_side+'_bet'))
+                ReactDOM.render(React.createElement (Hand_Bet,{bet:'$'+this.hands[this.hand_selected].bet}),  document.getElementById(this.hands[this.hand_selected].hand_side+'_bet'))
 
             }else if(bet > this.bank){
                 console.log("Hey! You Are Broke!");
@@ -992,6 +1024,7 @@ function Player (name,bank) {
                           }
                               game1.player.hands[this.hand_selected].check_double_down();
                       }
+                      game1.activate_hit_button();
                   }
             }else {
                 game1.unmount_cards();
@@ -1261,12 +1294,9 @@ function Hand (side) {
 
     this.show_card = function ( first_turn ) {
         if (first_turn) {
-            ReactDOM.unmountComponentAtNode(document.getElementById('dealer_card1'))
-            ReactDOM.unmountComponentAtNode(document.getElementById('dealer_card2'))
             ReactDOM.render(React.createElement (Card,{visible:'show',cardNumber:53,side:'dealer',handPosition:1}),  document.getElementById('dealer_card1'))
-            ReactDOM.render(React.createElement (Card,{visible: 'show',cardNumber:this.cards[1].cardNumber,side:'dealer',handPosition:2}),  document.getElementById('dealer_card2'))
+            this.cards_shown ++;
         }else {
-            ReactDOM.unmountComponentAtNode(document.getElementById(this.hand_side+"_card"+this.cards_shown))
             ReactDOM.render(React.createElement (Card,{visible:'show',cardNumber:this.cards[this.cards_shown-1].cardNumber,side:this.hand_side,handPosition:this.cards_shown}),  document.getElementById(this.hand_side+"_card"+this.cards_shown))
             this.cards_shown ++;
             }
@@ -1468,17 +1498,12 @@ var Alert = new CustomAlert();
 function keyDown(e) {
     switch(e.keyCode) {
         case 32:
-            ReactDOM.unmountComponentAtNode(document.getElementById('hit_button'))
-            ReactDOM.render(React.createElement (Hit_Button,{down:true}),  document.getElementById('hit_button'))
             if (game1.player.hands[0].bet > 0){
-                 game1.player.hit_card();
+                 Hit_Button.MouseDownHandler();
             }else {
                  Alert.render('You need to place a bet before starting the round.','Place A Bet!')
             }
-            setTimeout(function(){
-              ReactDOM.unmountComponentAtNode(document.getElementById('hit_button'))
-              ReactDOM.render(React.createElement (Hit_Button,{down:false}),  document.getElementById('hit_button'))
-            },200)
+
             break;
         case 49:
             if(game1.player.playing){
