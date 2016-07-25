@@ -1,3 +1,4 @@
+//Preload all of the images
 if (document.images) {
   var list = []
     for( var x = 1; x < 54; x++ ) {
@@ -9,7 +10,6 @@ if (document.images) {
     for( var x = 0; x < 35; x++ ) {
         list[x] = new Image()
     }
-
     list[0].src="static/images/buttons/win.png"
     list[1].src="static/images/buttons/lose.png"
     list[2].src="static/images/buttons/draw.png"
@@ -53,10 +53,6 @@ window.onload = function() {
     document.getElementById("blackback").style.display = "none";
     new FastClick(document.body);
 };
-
-
-
-
 
 var React = require('react')
 var ReactDOM = require('react-dom')
@@ -211,7 +207,6 @@ var Hit_Button = React.createClass ({
      this.setState({
          down: false
      });
-
  },
   render: function() {
       var hoverpic = "hitbutton.png"
@@ -261,10 +256,8 @@ var Stand_Button = React.createClass ({
 var Split_Button = React.createClass ({
   getInitialState: function() {
      return {
-
          down: false,
          inactive:this.props.inactive
-
      };
  },
 
@@ -273,10 +266,8 @@ var Split_Button = React.createClass ({
             down: true
         });
         if(this.props.inactive){
-
         }else {
           game1.player.split_hand(game1.player.hand_selected);
-
         }
     },
  onMouseUpHandler: function() {
@@ -404,7 +395,7 @@ var Blank = React.createClass ({
 var hit = ReactDOM.render(React.createElement (Hit_Button,{active:true,down:false}),  document.getElementById('hit_button'))
 
 function inject_objects() {
-var total_bank = ReactDOM.render(React.createElement (Bank,{bank:'$3000'}),  document.getElementById('total_bank'))
+var total_bank = ReactDOM.render(React.createElement (Bank,{bank:'$10000'}),  document.getElementById('total_bank'))
 var total_bet = ReactDOM.render(React.createElement (Bet_Total,{total_bet:'$0'}),  document.getElementById('total_bet'))
 var total_win = ReactDOM.render(React.createElement (Win,{win_amount:'$0'}),  document.getElementById('total_win'))
 var stand_button= ReactDOM.render(React.createElement (Stand_Button),  document.getElementById('stand_button'))
@@ -426,12 +417,8 @@ var bet_chip50 = ReactDOM.render(React.createElement (Chip_Bet,{chipNumber:'50'}
 var bet_chip100 = ReactDOM.render(React.createElement (Chip_Bet,{chipNumber:'100'}),  document.getElementById('bet_chip100'))
 };
 
-
-
-
-
 function Game () {
-	this.player = new Player("Andrew",3000);
+	this.player = new Player("Andrew",10000);
   this.dealer = new Player("Dealer",0);
   this.blackjack = false;
 	this.deck = new Deck();
@@ -523,10 +510,8 @@ function Game () {
               if (this.player.hands[x].hand_value > 21 && this.player.hands[x].cards.length>1) {
                   for(var y=0; y < this.player.hands[x].cards;y++ ) {
                       if (this.player.hands[x].cards[y].cardValue === 11) {
-
                           this.player.hands[x].cards[y].cardValue = 1;
                           this.player.hands[x].hand_value -= 10;
-                          console.log("hand_score"+this.player.hands[x].hand_value);
                       }
                   }
                   ReactDOM.unmountComponentAtNode(document.getElementById(this.player.hands[x].hand_side+'_score'))
@@ -636,7 +621,6 @@ function Game () {
                       var msg = "YOU AND THE DEALER BOTH GOT " + this.player.hands[x].hand_value + ". DRAW GAME!";
                       console.log(msg);
                       console.log("total_win"+ this.player.total_won)
-
                       break;
               }
           }
@@ -734,7 +718,6 @@ function Game () {
               for(var z=0; z < game1.player.hands[x].chips.length; z++) {
                   ReactDOM.unmountComponentAtNode(document.getElementById(game1.player.hands[x].hand_side+'_chip'+(z+1)));
               }
-
               game1.player.hands[x].chip_count = 0;
               game1.player.hands[x].chips.length = 0;
               game1.game_over = false;
@@ -882,8 +865,6 @@ function Game () {
   };
 
 };
-
-
 
 function Player (name,bank) {
   	this.name=name;
@@ -1313,7 +1294,6 @@ function Hand (side) {
     }
 
     this.check_split = function () {
-
         var hand_count = game1.player.hands.map(function(x){
             return x
         }).filter(function(x){
@@ -1433,7 +1413,7 @@ function Deck () {
 			this.cards = [];
       this.makeNewDeck = function (numberOfDecks) {
 					var suits = ['Clubs','Diamonds','Hearts','Spades'];
-					var faces = ['2','2','2','2','2','2','2','2','2','2','2','2','2'];
+					var faces = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 					var cardValue = [11,2,3,4,5,6,7,8,9,10,10,10,10];
 					for( var i = 0; i < numberOfDecks; i++ ) {
 							var cardnumber = 0;
